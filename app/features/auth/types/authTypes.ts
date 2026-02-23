@@ -1,4 +1,4 @@
-import type { User } from './user'
+import type { User } from '~/types/user';
 
 export interface LoginPayload {
   email: string
@@ -17,4 +17,8 @@ export interface SignupPayload {
 
 export interface SignupResponse {
   user: User
+}
+
+export interface ApiErrorResponse {
+  error: string; 
 }

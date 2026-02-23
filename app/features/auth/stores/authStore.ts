@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { authService } from "~/services/auth/authService";
-import type { LoginPayload } from "~/types/authTypes";
+import { authService } from "~/features/auth/services/authService";
+import type { LoginPayload } from "~/features/auth/types/authTypes";
 import type { User } from "~/types/user";
 
 export const useAuthStore = defineStore("auth", {

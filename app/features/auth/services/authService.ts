@@ -3,7 +3,7 @@ import type {
   SignupPayload,
   SignupResponse,
   LoginResponse,
-} from "~/types/authTypes";
+} from "~/features/auth/types/authTypes";
 import type { User } from "~/types/user";
 
 export const authService = {
