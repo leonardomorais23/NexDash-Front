@@ -3,6 +3,8 @@ import { ref, type HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import hideIcon from '/icons/hide.svg?url'
+import unhideIcon from '/icons/unhide.svg?url'
 import {
   Field,
   FieldDescription,
@@ -93,13 +95,13 @@ function togglePassword() {
                 >
                   <img
                     v-if="showPassword"
-                    src="/icons/hide.svg"
+                    :src="hideIcon"
                     alt="Ocultar senha"
                     class="w-4 h-4"
                   >
                   <img
                     v-else
-                    src="/icons/unhide.svg"
+                    :src="unhideIcon"
                     alt="Mostrar senha"
                     class="w-4 h-4"
                   >

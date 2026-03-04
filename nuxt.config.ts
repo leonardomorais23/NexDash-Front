@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxt/icon',
     'shadcn-nuxt',
+    'pinia-plugin-persistedstate'
   ],
   shadcn: {
     /**
@@ -28,12 +29,9 @@ export default defineNuxtConfig({
     componentDir: '@/components/ui'
   },
    pinia: {
-    storesDirs:['./app/stores/**']
+    storesDirs:['./app/features/*/stores/**']
   },
   future: {
     compatibilityVersion: 4,
-  },
-  routeRules: {
-    '/': { redirect: '/login'}
   }
 })

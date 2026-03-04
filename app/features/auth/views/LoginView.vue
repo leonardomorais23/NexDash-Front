@@ -14,7 +14,7 @@ const handleLogin = async (payload: LoginPayload) => {
 
   try {
     await auth.login(payload)
-    navigateTo('/Home')
+    navigateTo('/')
   } catch (err) {
     if (err instanceof FetchError) {
       const errorData = err.data as ApiErrorResponse

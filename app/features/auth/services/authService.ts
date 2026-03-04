@@ -37,6 +37,10 @@ export const authService = {
 
   async fetchUser(): Promise<User> {
     const { $api } = useNuxtApp();
-    return await $api<User>("/user");
-  },
+    return await $api<User>("/user", {
+      method: "GET",
+      retry:0,
+    });
+
+  }
 };

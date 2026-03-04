@@ -1,24 +1,24 @@
 import type { User } from '~/types/user';
 
-export interface LoginPayload {
+export type LoginPayload = {
   email: string
   password: string
-}
+};
 
-export interface LoginResponse {
+export type LoginResponse = {
   user: User;
-}
+};
 
-export interface SignupPayload {
+export type SignupPayload = {
   name: string
   email: string
   password: string
-}
+};
 
-export interface SignupResponse {
+export type SignupResponse = {
   user: User
-}
+};
 
-export interface ApiErrorResponse {
+export type ApiErrorResponse = {
   error: string; 
-}
+};

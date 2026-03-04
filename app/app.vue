@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { useAuthStore } from '~/features/auth/stores/authStore'
 
-onMounted(() => {
-  const auth = useAuthStore()
-  auth.fetchUser()
+const auth = useAuthStore()
+const isLogged = useCookie('is_logged_in')
+
+onMounted(async () => {
+  if (isLogged.value && !auth.user) {
+    try {
+      await auth.fetchUser()
+    } catch {
+      isLogged.value = null
+      navigateTo('/login')
+    }
+  }
 })
 </script>
 
 <template>
-  <div class="antialiased text-gray-900">
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
