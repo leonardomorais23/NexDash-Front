@@ -34,6 +34,9 @@ const props = withDefaults(defineProps<SidebarProps>(), {
   variant: "inset",
 })
 
+const emit = defineEmits<{
+  (e: 'logout'): void
+}>()
 const authStore = useAuthStore()
 
 const data = computed(() => ({
@@ -145,7 +148,7 @@ const data = computed(() => ({
     </SidebarContent>
     <SidebarFooter>
       <ClientOnly>
-        <NavUser :user="data.user" />
+        <NavUser :user="data.user"  @logout="emit('logout')"/>
         
         <template #fallback>
           <div class="flex items-center gap-2 p-2">

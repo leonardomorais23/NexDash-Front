@@ -19,26 +19,24 @@ export const useAuthStore = defineStore("auth", {
 
         const isLogged = useCookie("is_logged_in");
         isLogged.value = "true";
-
       } finally {
         this.loading = false;
       }
     },
 
     async logout() {
+      this.loading = true;
       try {
-        const { $api } = useNuxtApp();
-        await $api("/logout", { method: "POST" });
-      } finally {
-
+        await authService.logout();
         this.user = null;
         const isLogged = useCookie("is_logged_in");
         isLogged.value = null;
+      } finally {
+        this.loading = false;
       }
     },
 
     async fetchUser() {
-
       this.loading = true;
       try {
         const user = await authService.fetchUser();

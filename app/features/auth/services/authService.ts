@@ -26,6 +26,19 @@ export const authService = {
     });
   },
 
+  async logout(): Promise<void> {
+    const { $api } = useNuxtApp();
+    const xsrfToken = useCookie("XSRF-TOKEN").value;
+
+    await $api("/logout", { 
+      method: "POST",
+      headers: {
+        'X-XSRF-TOKEN': xsrfToken || '',
+        'Accept': 'application/json'
+      }
+    });
+  },
+
   async signup(payload: SignupPayload): Promise<SignupResponse> {
     const { $api } = useNuxtApp();
 

@@ -38,6 +38,10 @@ const _props = defineProps<{
 }>()
 
 const { isMobile } = useSidebar()
+
+const emit = defineEmits<{
+  (e: 'logout'): void
+}>()
 </script>
 
 <template>
@@ -105,7 +109,7 @@ const { isMobile } = useSidebar()
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem @click="emit('logout')">
             <LogOut />
             Log out
           </DropdownMenuItem>

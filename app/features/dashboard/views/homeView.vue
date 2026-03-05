@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppSidebar from "@/features/dashboard/components/AppSidebar.vue"
-
+import { useAuthStore } from '~/features/auth/stores/authStore'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,11 +17,28 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+
+const auth = useAuthStore()
+const isLoading = ref(false)
+
+
+const handleLogout = () => {
+    isLoading.value = true
+
+    try {
+      auth.logout()
+      navigateTo('/login')
+    } catch (err) {
+      console.error('Erro ao realizar logout:', err)
+    } finally {
+      isLoading.value = false
+    }
+}
 </script>
 
 <template>
   <SidebarProvider>
-    <AppSidebar />
+    <AppSidebar @logout="handleLogout" />
     <SidebarInset>
       <header class="flex h-16 shrink-0 items-center gap-2">
         <div class="flex items-center gap-2 px-4">
