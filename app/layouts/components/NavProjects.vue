@@ -2,16 +2,13 @@
 import type { LucideIcon } from "lucide-vue-next"
 import {
   Folder,
-  Forward,
   MoreHorizontal,
-  Trash2,
 } from "lucide-vue-next"
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
@@ -37,48 +34,29 @@ const { isMobile } = useSidebar()
 
 <template>
   <SidebarGroup class="group-data-[collapsible=icon]:hidden">
-    <SidebarGroupLabel>Projects</SidebarGroupLabel>
+    <SidebarGroupLabel class="text-slate-500 font-semibold tracking-wider text-[10px] uppercase">Projects</SidebarGroupLabel>
     <SidebarMenu>
       <SidebarMenuItem v-for="item in projects" :key="item.name">
-        <SidebarMenuButton as-child>
+        <SidebarMenuButton as-child class="text-slate-300 hover:bg-white/5 hover:text-white">
           <a :href="item.url">
-            <component :is="item.icon" />
+            <component :is="item.icon" class="text-slate-400 group-hover:text-sky-400" />
             <span>{{ item.name }}</span>
           </a>
         </SidebarMenuButton>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
-            <SidebarMenuAction show-on-hover>
+            <SidebarMenuAction show-on-hover class="text-slate-500 hover:bg-white/10">
               <MoreHorizontal />
               <span class="sr-only">More</span>
             </SidebarMenuAction>
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            class="w-48 rounded-lg"
-            :side="isMobile ? 'bottom' : 'right'"
-            :align="isMobile ? 'end' : 'start'"
-          >
-            <DropdownMenuItem>
-              <Folder class="text-muted-foreground" />
+          <DropdownMenuContent class="w-48 rounded-lg bg-slate-900 border-white/10 text-slate-300" :side="isMobile ? 'bottom' : 'right'" :align="isMobile ? 'end' : 'start'">
+            <DropdownMenuItem class="focus:bg-white/10 focus:text-white cursor-pointer">
+              <Folder class="mr-2 size-4 text-slate-500" />
               <span>View Project</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Forward class="text-muted-foreground" />
-              <span>Share Project</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Trash2 class="text-muted-foreground" />
-              <span>Delete Project</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
+            </DropdownMenuContent>
         </DropdownMenu>
-      </SidebarMenuItem>
-      <SidebarMenuItem>
-        <SidebarMenuButton>
-          <MoreHorizontal />
-          <span>More</span>
-        </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>
   </SidebarGroup>
