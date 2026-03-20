@@ -5,7 +5,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-vue-next";
 import { dashService } from "@/features/dashboard/services/DashServices";
 import type { DashboardResponse } from "@/features/dashboard/types/dashboardTypes";
 
-
 const modules = await dashService.getModules();
 
 const currentIndex = ref(0);

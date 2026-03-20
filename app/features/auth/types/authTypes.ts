@@ -1,8 +1,8 @@
-import type { User } from '~/types/user';
+import type { User } from "~/types/user";
 
 export type LoginPayload = {
-  email: string
-  password: string
+  email: string;
+  password: string;
 };
 
 export type LoginResponse = {
@@ -10,15 +10,15 @@ export type LoginResponse = {
 };
 
 export type SignupPayload = {
-  name: string
-  email: string
-  password: string
+  name: string;
+  email: string;
+  password: string;
 };
 
 export type SignupResponse = {
-  user: User
+  user: User;
 };
 
 export type ApiErrorResponse = {
-  error: string; 
+  error: string;
 };

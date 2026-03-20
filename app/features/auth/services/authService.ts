@@ -11,18 +11,21 @@ export const authService = {
     const { $api } = useNuxtApp();
     const config = useRuntimeConfig();
 
-    const rootUrl = config.public.apiBase.replace(/\/api$/, "");
+    let xsrfToken = useCookie("XSRF-TOKEN").value;
 
-    await $api(`${rootUrl}/sanctum/csrf-cookie`);
-
-    const xsrfToken = useCookie("XSRF-TOKEN").value;
+    if (!xsrfToken) {
+      const rootUrl = config.public.apiBase.replace(/\/api$/, "");
+      await $api(`${rootUrl}/sanctum/csrf-cookie`);
+      xsrfToken = useCookie("XSRF-TOKEN").value;
+    }
 
     return await $api<LoginResponse>("/login", {
       method: "POST",
       body: payload,
       headers: {
-        'X-XSRF-TOKEN': xsrfToken || '', 
-      }
+        "X-XSRF-TOKEN": xsrfToken || "",
+        Accept: "application/json",
+      },
     });
   },
 
@@ -30,12 +33,12 @@ export const authService = {
     const { $api } = useNuxtApp();
     const xsrfToken = useCookie("XSRF-TOKEN").value;
 
-    await $api("/logout", { 
+    await $api("/logout", {
       method: "POST",
       headers: {
-        'X-XSRF-TOKEN': xsrfToken || '',
-        'Accept': 'application/json'
-      }
+        "X-XSRF-TOKEN": xsrfToken || "",
+        Accept: "application/json",
+      },
     });
   },
 
@@ -52,8 +55,7 @@ export const authService = {
     const { $api } = useNuxtApp();
     return await $api<User>("/user", {
       method: "GET",
-      retry:0,
+      retry: 0,
     });
-
-  }
+  },
 };
