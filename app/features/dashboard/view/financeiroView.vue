@@ -2,22 +2,24 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import DashboardDisplay from "../components/DashboardDisplay.vue";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-vue-next";
-import { dashService } from "@/features/dashboard/services/DashServices";
+import { useDashService } from "@/features/dashboard/services/DashServices";
 import type { DashboardResponse } from "@/features/dashboard/types/dashboardTypes";
 
-const modules = await dashService.getModules();
-
+const { getModules, getDashData } = useDashService();
 const currentIndex = ref(0);
-const dashboards = computed(() => modules || []);
+
+const { data: modules } = await useAsyncData('dashboard-modules', () => getModules());
+
+const dashboards = computed(() => modules.value || []);
 const currentDash = computed(() => dashboards.value[currentIndex.value]);
 
-const { data } = await useAsyncData<DashboardResponse>(
+const { data: payload, refresh } = await useAsyncData<DashboardResponse>(
   `dash-payload-${currentDash.value?.id}`,
-  () => dashService.getDashData(currentDash.value!.id),
+  () => getDashData(currentDash.value!.id), 
   {
     watch: [currentDash],
     immediate: !!currentDash.value,
-  },
+  }
 );
 
 const next = () => {
@@ -40,13 +42,21 @@ onMounted(() => {
     if (e.key === "ArrowLeft") prev();
   };
   window.addEventListener("keydown", handleKeyDown);
-  onUnmounted(() => window.removeEventListener("keydown", handleKeyDown));
+
+  const interval = setInterval(() => {
+    refresh();
+  }, 60000);
+
+  onUnmounted(() => {
+    window.removeEventListener("keydown", handleKeyDown);
+    clearInterval(interval);
+  });
 });
 </script>
 
 <template>
   <div class="absolute inset-0 flex flex-col p-6 overflow-hidden bg-slate-950">
-    <template v-if="currentDash">
+    <template v-if="currentDash && payload">
       <button
         class="absolute left-2 top-1/2 -translate-y-1/2 p-2 text-white/20 hover:text-white z-50"
         @click="prev"
@@ -61,17 +71,16 @@ onMounted(() => {
         <ChevronRightIcon class="size-10" />
       </button>
 
-      <div class="flex-1 flex flex-col min-h-0 w-full max-w-7xl mx-auto">
-        <Transition mode="out-in" name="fade">
-          <DashboardDisplay
-            v-if="data"
-            :key="currentDash.id"
-            :title="currentDash.title"
-            :metrics="data.metrics"
-            :chart-data="data.history"
-          />
-        </Transition>
-      </div>
+      <div class="flex-1 flex flex-col min-h-0 w-full px-4 lg:px-8"> 
+  <Transition mode="out-in" name="dash-slide">
+    <DashboardDisplay
+      :key="currentDash.id"
+      :title="currentDash.title"
+      :metrics="payload.metrics"
+      :chart-data="payload.history"
+    />
+  </Transition>
+</div>
 
       <div class="flex justify-center gap-2 pt-4 shrink-0">
         <div
@@ -86,22 +95,7 @@ onMounted(() => {
     </template>
 
     <div v-else class="flex flex-1 items-center justify-center text-slate-500">
-      Nenhum módulo disponível...
+      {{ dashboards.length === 0 ? 'Nenhum módulo disponível...' : 'Carregando dados...' }}
     </div>
   </div>
 </template>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.3s ease;
-}
-.fade-enter-from {
-  opacity: 0;
-  transform: translateX(20px);
-}
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-</style>

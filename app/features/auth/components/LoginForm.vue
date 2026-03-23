@@ -3,8 +3,7 @@ import { ref, type HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import hideIcon from "/icons/hide.svg?url";
-import unhideIcon from "/icons/unhide.svg?url";
+
 import {
   Field,
   FieldGroup,
@@ -88,7 +87,10 @@ function togglePassword() {
                   class="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 hover:text-slate-600"
                   @click="togglePassword"
                 >
-                  <img :src="showPassword ? hideIcon : unhideIcon" class="w-5 h-5 opacity-70" >
+                  <img 
+  :src="showPassword ? '/icons/Hide.svg' : '/icons/Unhide.svg'" 
+  class="w-5 h-5 opacity-70" 
+>
                 </button>
               </div>
             </Field>
