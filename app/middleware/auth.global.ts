@@ -1,5 +1,5 @@
 import { useAuthStore } from '~/features/auth/stores/authStore'
-import type { ApiErrorResponse } from '~/types/response'
+import { usePermissions } from '~/composables/usePermissions'
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const auth = useAuthStore()
@@ -8,6 +8,15 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const publicRoutes = ['/login', '/register', '/esqueci-senha']
   const isPublicRoute = publicRoutes.includes(to.path)
 
+  const { hasPermission } = usePermissions()
+
+  const requiredPerm = to.meta.requiresPermission as string
+  if (requiredPerm && !hasPermission(requiredPerm)) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Acesso negado'
+    })
+  }
 
   if (isPublicRoute && isLogged.value && auth.user) {
     return navigateTo('/')
@@ -23,17 +32,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   if (isLogged.value && !auth.user) {
-  try {
-    await auth.fetchUser()
-  } catch (error) {
-    const err = error as ApiErrorResponse
-
-    const status = err.response?.status || err.statusCode
-    if (status === 401 || status === 419) {
-
-      isLogged.value = null
-      return navigateTo('/login')
+    try {
+      await auth.fetchUser()
+    } catch (error: any) {
+      const status = error?.response?.status || error?.statusCode
+      if (status === 401 || status === 419) {
+        isLogged.value = null
+        return navigateTo('/login')
+      }
     }
   }
-}
 })

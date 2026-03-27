@@ -47,20 +47,27 @@ const data = computed(() => ({
   navMain: [
     {
       title: "Dashboards",
-      url: "/dashboard/financeiro",
+      url: "/dashboards",
       icon: SquareTerminal,
       isActive: true,
-      // items: [
-      //   { title: "Financeiro", url: "/dashboard/financeiro" }
-      // ],
+      requiresPermission: "dashboard:financeiro:read"
     },
     {
-      title: "Settings",
+      title: "Configurações",
       url: "#",
       icon: Settings2,
+      requiresRole: "admin",
       items: [
-        { title: "Usuários", url: "/dashboard/users" },
-        { title: "Gerenciar Dashboards", url: "/dashboard/manage-dashboards" }
+        {
+          title: "Usuários",
+          url: "/dashboard/users",
+          requiresPermission: "users:manage"
+        },
+        {
+          title: "Gerenciar Dashboards",
+          url: "/dashboard/manage-dashboards",
+          requiresPermission: "dashboards:manage"
+        }
       ],
     },
   ],

@@ -4,9 +4,11 @@ import DashboardDisplay from "../components/DashboardDisplay.vue";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-vue-next";
 import { useDashService } from "@/features/dashboard/services/DashServices";
 import type { DashboardResponse } from "@/features/dashboard/types/dashboardTypes";
+import { usePermissions } from "@/composables/usePermissions";
 
 const { getModules, getDashData } = useDashService();
 const currentIndex = ref(0);
+const { hasPermission } = usePermissions();
 
 const {
   data: modules,
@@ -18,7 +20,12 @@ const {
   immediate: true,
 });
 
-const dashboards = computed(() => modules.value || []);
+const dashboards = computed(() => {
+  const allDashboards = modules.value || [];
+  return allDashboards.filter(dash =>
+    hasPermission(`dashboard:${dash.id}:read`)
+  );
+});
 const currentDash = computed(() => dashboards.value[currentIndex.value]);
 
 const modulesHasLoadedOnce = ref(false);
@@ -111,7 +118,6 @@ onMounted(() => {
         const newData = await getDashData(currentDash.value.id);
         rawPayload.value = newData;
       } catch (error) {
-        console.error("Erro ao atualizar dados:", error);
       }
     }
   }, 60000);
