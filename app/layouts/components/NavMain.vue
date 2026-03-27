@@ -43,10 +43,10 @@ defineProps<{
             :tooltip="item.title"
             class="hover:bg-white/5 hover:text-white transition-all py-5 rounded-xl text-slate-400 data-[state=open]:bg-white/5 data-[state=open]:text-white"
           >
-          <RouterLink :to="item.url">
+          <NuxtLink :to="item.url">
              <component :is="item.icon" class="size-5" />
               <span class="font-medium">{{ item.title }}</span>
-          </RouterLink>
+          </NuxtLink>
           </SidebarMenuButton>
           <template v-if="item.items?.length">
             <CollapsibleTrigger as-child>
@@ -58,9 +58,9 @@ defineProps<{
               <SidebarMenuSub class="bg-transparent border-none space-y-1">
                 <SidebarMenuSubItem v-for="subItem in item.items" :key="subItem.title">
                   <SidebarMenuSubButton as-child class="hover:bg-white/5 hover:text-sky-400 text-slate-500 rounded-lg py-4 transition-colors">
-                    <RouterLink :to="subItem.url">
+                    <NuxtLink :to="subItem.url">
                       <span class="text-xs font-medium">{{ subItem.title }}</span>
-                      </RouterLink>
+                      </NuxtLink>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>

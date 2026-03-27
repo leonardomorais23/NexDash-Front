@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { authService } from "~/features/auth/services/authService";
-import type { LoginPayload } from "~/features/auth/types/authTypes";
+import type { LoginPayload, SignupPayload } from "~/features/auth/types/authTypes";
 import type { User } from "~/types/user";
 import { FetchError } from "ofetch";
 
@@ -72,6 +72,23 @@ export const useAuthStore = defineStore("auth", {
           }
         }
         throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
+    async signup(payload: SignupPayload) {
+      this.loading = true;
+      try {
+        await this.preFetchCsrf();
+
+        const data = await authService.signup(payload);
+
+        this.user = data.user;
+
+        const isLogged = useCookie("is_logged_in");
+        isLogged.value = "true";
+
+        return data;
       } finally {
         this.loading = false;
       }

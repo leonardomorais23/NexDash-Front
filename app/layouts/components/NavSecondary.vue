@@ -9,7 +9,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 
-const _props = defineProps<{
+const props = defineProps<{
   items: {
     title: string
     url: string

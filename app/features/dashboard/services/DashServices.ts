@@ -1,4 +1,4 @@
-import type { DashboardResponse, DashboardConfig } from "@/features/dashboard/types/dashboardTypes";
+import type { DashboardResponse, DashboardConfig } from "~/features/dashboard/types/dashboardTypes";
 
 export const useDashService = () => {
   const { $api } = useNuxtApp();

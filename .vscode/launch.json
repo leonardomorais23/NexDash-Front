@@ -7,6 +7,12 @@
             "name": "Iniciar o Chrome em relação a localhost",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "chrome",
+            "name": "http://localhost:3000/",
+            "request": "launch",
+            "url": "http://localhost:3000/"
         }
     ]
 }

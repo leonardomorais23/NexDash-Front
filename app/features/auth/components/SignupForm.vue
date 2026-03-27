@@ -109,9 +109,9 @@ const handleSubmit = () => {
 
             <p class="text-center text-sm text-slate-500 mt-2">
               Já tem uma conta?
-              <RouterLink to="/login" class="font-bold text-slate-900 hover:underline">
+              <NuxtLink to="/login" class="font-bold text-slate-900 hover:underline">
                 Faça login
-              </RouterLink>
+              </NuxtLink>
             </p>
           </FieldGroup>
         </form>
@@ -120,8 +120,8 @@ const handleSubmit = () => {
 
     <p class="px-6 text-center text-xs text-slate-400/90 leading-relaxed">
       Ao clicar em continuar, você concorda com nossos <br >
-      <RouterLink to="#" class="text-slate-300 underline decoration-slate-500 hover:text-white">Termos de Serviço</RouterLink> e
-      <RouterLink to="#" class="text-slate-300 underline decoration-slate-500 hover:text-white">Política de Privacidade</RouterLink>.
+      <NuxtLink to="#" class="text-slate-300 underline decoration-slate-500 hover:text-white">Termos de Serviço</NuxtLink> e
+      <NuxtLink to="#" class="text-slate-300 underline decoration-slate-500 hover:text-white">Política de Privacidade</NuxtLink>.
     </p>
   </div>
 </template>

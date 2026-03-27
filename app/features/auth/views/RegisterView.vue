@@ -3,10 +3,14 @@ import { useAuthStore } from "~/features/auth/stores/authStore";
 import SignupForm from "~/features/auth/components/SignupForm.vue";
 import type { SignupPayload } from "~/features/auth/types/authTypes";
 
-function handleSignup(payload: SignupPayload) {
+async function handleSignup(payload: SignupPayload) {
   const auth = useAuthStore();
-  auth.signup(payload);
-  console.log("Signup payload:", payload);
+  try {
+    await auth.signup(payload);
+  
+  } catch (error) {
+    console.error("Erro no signup:", error);
+  }
 }
 </script>
 

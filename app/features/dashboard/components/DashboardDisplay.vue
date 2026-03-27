@@ -161,8 +161,8 @@ const formatTime = (val: string | number) => {
           </div>
         </div>
 
-        <div class="flex-1 bg-[#0b0f1a] rounded-3xl border border-white/5 p-6 flex flex-col shadow-2xl relative overflow-hidden">
-        <div class="flex-1 min-h-0 relative"> <client-only>
+        <div class="flex-1 min-h-0 relative">
+          <client-only>
             <DashboardChart :data="chartData" />
             
             <template #placeholder>
@@ -171,9 +171,7 @@ const formatTime = (val: string | number) => {
               </div>
             </template>
           </client-only>
-          
         </div>
-      </div>
       </div>
     </div>
   </div>

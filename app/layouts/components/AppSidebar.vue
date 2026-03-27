@@ -47,14 +47,12 @@ const data = computed(() => ({
   navMain: [
     {
       title: "Dashboards",
-      url: "#",
+      url: "/dashboard/financeiro",
       icon: SquareTerminal,
       isActive: true,
-      items: [
-        { title: "Financeiro", url: "/dashboard/financeiro" },
-        { title: "BackOffice", url: "/dashboard/backoffice" },
-        { title: "Pedagógico", url: "/dashboard/pedagogico" },
-      ],
+      // items: [
+      //   { title: "Financeiro", url: "/dashboard/financeiro" }
+      // ],
     },
     {
       title: "Settings",

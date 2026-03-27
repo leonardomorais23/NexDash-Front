@@ -25,7 +25,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 
-const _props = defineProps<{
+const props = defineProps<{
   user: {
     name: string
     email: string

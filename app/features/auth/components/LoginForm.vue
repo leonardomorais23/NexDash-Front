@@ -70,9 +70,9 @@ function togglePassword() {
             <Field class="space-y-2">
               <div class="flex items-center justify-between">
                 <FieldLabel for="password" class="text-slate-700 font-semibold">Senha</FieldLabel>
-                <RouterLink to="#" class="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors">
+                <NuxtLink to="#" class="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors">
                   Esqueci minha senha
-                </RouterLink>
+                </NuxtLink>
               </div>
               <div class="relative">
                 <Input
@@ -112,9 +112,9 @@ function togglePassword() {
 
             <p class="text-center text-sm text-slate-500">
               Não possui uma conta?
-              <RouterLink to="/register" class="ml-1 font-bold text-slate-900 hover:underline">
+              <NuxtLink to="/register" class="ml-1 font-bold text-slate-900 hover:underline">
                 Crie uma agora!
-              </RouterLink>
+              </NuxtLink>
             </p>
           </FieldGroup>
         </form>
@@ -132,8 +132,8 @@ function togglePassword() {
 
     <p class="px-6 text-center text-xs text-slate-400/80 leading-relaxed">
       Ao clicar em continuar, você concorda com nossos <br >
-      <RouterLink to="#" class="text-slate-300 hover:text-white underline decoration-slate-500">Termos de Serviço</RouterLink> e
-      <RouterLink to="#" class="text-slate-300 hover:text-white underline decoration-slate-500">Política de Privacidade</RouterLink>.
+      <NuxtLink to="#" class="text-slate-300 hover:text-white underline decoration-slate-500">Termos de Serviço</NuxtLink> e
+      <NuxtLink to="#" class="text-slate-300 hover:text-white underline decoration-slate-500">Política de Privacidade</NuxtLink>.
     </p>
   </div>
 </template>
