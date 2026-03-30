@@ -4,9 +4,29 @@ import type { LoginPayload, SignupPayload } from "~/features/auth/types/authType
 import type { User } from "~/types/user";
 import { FetchError } from "ofetch";
 
+function setUserCookie(user: User, hours = 1) {
+  const cookie = useCookie("auth_user", { maxAge: 60 * 60 * hours }); 
+  cookie.value = JSON.stringify(user);
+}
+
+function getUserCookie(): User | null {
+  const cookie = useCookie("auth_user");
+  if (!cookie.value) return null;
+  try {
+    return JSON.parse(cookie.value) as User;
+  } catch {
+    return null;
+  }
+}
+
+function clearUserCookie() {
+  const cookie = useCookie("auth_user");
+  cookie.value = null;
+}
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    user: null as User | null,
+    user: getUserCookie(), 
     loading: false,
   }),
 
@@ -30,10 +50,10 @@ export const useAuthStore = defineStore("auth", {
       this.loading = true;
       try {
         await this.preFetchCsrf();
-
         const data = await authService.login(payload);
 
         this.user = data.user;
+        setUserCookie(data.user, 1); 
 
         const isLogged = useCookie("is_logged_in");
         isLogged.value = "true";
@@ -48,7 +68,9 @@ export const useAuthStore = defineStore("auth", {
       this.loading = true;
       try {
         await authService.logout();
+
         this.user = null;
+        clearUserCookie(); 
         const isLogged = useCookie("is_logged_in");
         isLogged.value = null;
       } finally {
@@ -61,9 +83,11 @@ export const useAuthStore = defineStore("auth", {
       try {
         const user = await authService.fetchUser();
         this.user = user;
+        setUserCookie(user, 1); 
         return user;
       } catch (error: unknown) {
         this.user = null;
+        clearUserCookie();
         if (error instanceof FetchError) {
           const statusCode = error.response?.status;
           if (statusCode === 401 || statusCode === 419) {
@@ -76,14 +100,15 @@ export const useAuthStore = defineStore("auth", {
         this.loading = false;
       }
     },
+
     async signup(payload: SignupPayload) {
       this.loading = true;
       try {
         await this.preFetchCsrf();
-
         const data = await authService.signup(payload);
 
         this.user = data.user;
+        setUserCookie(data.user, 1); 
 
         const isLogged = useCookie("is_logged_in");
         isLogged.value = "true";

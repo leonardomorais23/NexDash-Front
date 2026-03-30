@@ -8,16 +8,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const publicRoutes = ['/login', '/register', '/esqueci-senha']
   const isPublicRoute = publicRoutes.includes(to.path)
 
-  const { hasPermission } = usePermissions()
-
-  const requiredPerm = to.meta.requiresPermission as string
-  if (requiredPerm && !hasPermission(requiredPerm)) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: 'Acesso negado'
-    })
-  }
-
   if (isPublicRoute && isLogged.value && auth.user) {
     return navigateTo('/')
   }
@@ -31,15 +21,24 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return navigateTo('/login')
   }
 
-  if (isLogged.value && !auth.user) {
+ if (isLogged.value && !auth.user) {
     try {
       await auth.fetchUser()
-    } catch (error: any) {
-      const status = error?.response?.status || error?.statusCode
-      if (status === 401 || status === 419) {
+      if (!auth.user) {
         isLogged.value = null
         return navigateTo('/login')
       }
+    } catch (error) {
+      isLogged.value = null
+      return navigateTo('/login')
     }
+  }
+  const { hasPermission } = usePermissions()
+  const requiredPerm = to.meta.requiresPermission as string
+  if (requiredPerm && !hasPermission(requiredPerm)) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Acesso negado'
+    })
   }
 })

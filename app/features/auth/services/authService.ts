@@ -53,8 +53,13 @@ export const authService = {
 
   async fetchUser(): Promise<User> {
     const { $api } = useNuxtApp();
+    const xsrfToken = useCookie("XSRF-TOKEN").value;
     return await $api<User>("/user", {
       method: "GET",
+      headers: {
+        "X-XSRF-TOKEN": xsrfToken || "",
+        Accept: "application/json",
+      },
       retry: 0,
     });
   },

@@ -26,7 +26,6 @@ export const usePermissions = () => {
   const canAccessFinanceiro = computed(() =>
     hasPermission('dashboard:financeiro:read') || isAdmin.value
   )
-
   return {
     hasRole,
     hasPermission,

@@ -10,6 +10,7 @@ const { getModules, getDashData } = useDashService();
 const currentIndex = ref(0);
 const { hasPermission } = usePermissions();
 
+
 const {
   data: modules,
   refresh: refreshModules,
@@ -20,12 +21,7 @@ const {
   immediate: true,
 });
 
-const dashboards = computed(() => {
-  const allDashboards = modules.value || [];
-  return allDashboards.filter(dash =>
-    hasPermission(`dashboard:${dash.id}:read`)
-  );
-});
+const dashboards = computed(() => modules.value || []);
 const currentDash = computed(() => dashboards.value[currentIndex.value]);
 
 const modulesHasLoadedOnce = ref(false);
@@ -85,12 +81,6 @@ const errorMessage = computed(() => {
   return "";
 });
 
-watch(dashboards, (list) => {
-  if (list.length === 0) {
-    refreshModules();
-  }
-});
-
 const next = () => {
   if (dashboards.value.length) {
     currentIndex.value = (currentIndex.value + 1) % dashboards.value.length;
@@ -106,6 +96,7 @@ const prev = () => {
 };
 
 onMounted(() => {
+
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "ArrowRight") next();
     if (e.key === "ArrowLeft") prev();
