@@ -50,11 +50,10 @@ const data = computed(() => ({
       url: "/dashboards",
       icon: SquareTerminal,
       isActive: true,
-      requiresPermission: "dashboard:financeiro:read"
     },
     {
       title: "Configurações",
-      url: "#",
+      url: "/teste",
       icon: Settings2,
       requiresRole: "admin",
       items: [

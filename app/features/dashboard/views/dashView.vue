@@ -4,12 +4,9 @@ import DashboardDisplay from "../components/DashboardDisplay.vue";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-vue-next";
 import { useDashService } from "@/features/dashboard/services/DashServices";
 import type { DashboardResponse } from "@/features/dashboard/types/dashboardTypes";
-import { usePermissions } from "@/composables/usePermissions";
 
 const { getModules, getDashData } = useDashService();
 const currentIndex = ref(0);
-const { hasPermission } = usePermissions();
-
 
 const {
   data: modules,
@@ -26,7 +23,7 @@ const currentDash = computed(() => dashboards.value[currentIndex.value]);
 
 const modulesHasLoadedOnce = ref(false);
 watch(modules, (value) => {
-  if (value !== undefined && value !== null && !isModulesLoading.value) {
+  if (value !== undefined && value !== null) {
     modulesHasLoadedOnce.value = true;
   }
 });
@@ -66,9 +63,14 @@ const isModulesLoading = computed(() => modulesPending.value);
 const isPayloadLoading = computed(
   () => payloadPending.value && !!currentDash.value,
 );
-const hasModulesLoaded = computed(
-  () => modulesHasLoadedOnce.value && !isModulesLoading.value,
+
+const isLoading = computed(
+  () => isModulesLoading.value || isPayloadLoading.value,
 );
+
+// const hasModulesLoaded = computed(
+//   () => !isModulesLoading.value && modules.value !== undefined,
+// );
 const hasModulesError = computed(() => !!modulesError.value);
 const hasPayloadError = computed(() => !!payloadError.value);
 const errorMessage = computed(() => {
@@ -96,7 +98,6 @@ const prev = () => {
 };
 
 onMounted(() => {
-
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "ArrowRight") next();
     if (e.key === "ArrowLeft") prev();
@@ -108,8 +109,7 @@ onMounted(() => {
       try {
         const newData = await getDashData(currentDash.value.id);
         rawPayload.value = newData;
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   }, 60000);
 
@@ -117,7 +117,7 @@ onMounted(() => {
     if (dashboards.value.length > 1) {
       next();
     }
-  }, 60000);
+  }, 180000);
 
   onUnmounted(() => {
     window.removeEventListener("keydown", handleKeyDown);
@@ -129,45 +129,30 @@ onMounted(() => {
 
 <template>
   <div class="absolute inset-0 flex flex-col p-6 overflow-hidden bg-slate-950">
-    <template v-if="isModulesLoading">
-      <div class="flex flex-1 items-center justify-center">
+    <template v-if="isLoading">
+      <div class="flex flex-1 min-h-[300px] items-center justify-center">
         <div class="flex flex-col items-center gap-4">
           <Icon
             name="lucide:loader-2"
             size="50"
             class="text-blue-500 animate-spin drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]"
           />
-          <p class="text-sm text-blue-300 tracking-wide animate-pulse">
-            Carregando módulos...
+          <p class="text-sm text-blue-300 tracking-wide animate-fade-in">
+            Buscando dados...
           </p>
         </div>
       </div>
     </template>
 
-    <template v-else-if="hasModulesLoaded && dashboards.length === 0">
+    <template v-else-if="!dashboards.length && modulesHasLoadedOnce">
       <div class="flex flex-1 items-center justify-center text-slate-500">
-        Nenhum módulo disponível...
+        Nenhum dashboard disponível no momento
       </div>
     </template>
 
     <template v-else-if="hasModulesError || hasPayloadError">
       <div class="flex flex-1 items-center justify-center text-red-400">
         Erro ao carregar dados: {{ errorMessage }}
-      </div>
-    </template>
-
-    <template v-else-if="isPayloadLoading">
-      <div class="flex flex-1 items-center justify-center">
-        <div class="flex flex-col items-center gap-4">
-          <Icon
-            name="lucide:loader-2"
-            size="50"
-            class="text-blue-500 animate-spin drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]"
-          />
-          <p class="text-sm text-blue-300 tracking-wide animate-pulse">
-            Carregando painel...
-          </p>
-        </div>
       </div>
     </template>
 
@@ -210,3 +195,15 @@ onMounted(() => {
     </template>
   </div>
 </template>
+
+
+<style>
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease forwards; 
+}
+</style>
