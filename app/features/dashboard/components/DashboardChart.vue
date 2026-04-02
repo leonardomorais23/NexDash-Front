@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch, nextTick } from "vue";
 import * as echarts from "echarts";
-import type { ChartHistoryItem } from "@/features/dashboard/types/dashboardTypes";
+import type { ChartHistoryItem } from "~/features/dashboard/types/DashboardTypes";
 
 const props = defineProps<{ data?: ChartHistoryItem[] }>();
 

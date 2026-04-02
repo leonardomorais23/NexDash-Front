@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppSidebar from "@/layouts/components/AppSidebar.vue";
-import { useAuthStore } from "~/features/auth/stores/authStore";
+import { useAuthStore } from "~/features/auth/stores/AuthStore";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 const auth = useAuthStore();

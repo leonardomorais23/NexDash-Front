@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePermissions } from "@/composables/usePermissions";
+import { usePermissions } from "~/features/auth/composables/UsePermissions";
 import type { LucideIcon } from "lucide-vue-next";
 import { ChevronRight } from "lucide-vue-next";
 import {

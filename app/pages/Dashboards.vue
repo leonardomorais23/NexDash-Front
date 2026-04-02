@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import DashView from "~/features/dashboard/views/dashView.vue";
-
-
+import DashView from "~/features/dashboard/views/DashView.vue";
 </script>
 
 <template>

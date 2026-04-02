@@ -1,41 +1,20 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { Command, Frame, LifeBuoy, Map, PieChart, Send, Settings2, SquareTerminal } from "lucide-vue-next";
 import type { SidebarProps } from '@/components/ui/sidebar'
-import { useAuthStore } from '~/features/auth/stores/authStore'
+import { useAuthStore } from '~/features/auth/stores/AuthStore'
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 
-import {
-
-  Command,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
-  Settings2,
-  SquareTerminal,
-} from "lucide-vue-next"
 
 import NavMain from '@/layouts/components/NavMain.vue'
 import NavProjects from '@/layouts/components/NavProjects.vue'
 import NavSecondary from '@/layouts/components/NavSecondary.vue'
 import NavUser from '@/layouts/components/NavUser.vue'
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from '@/components/ui/sidebar'
 
-const props = withDefaults(defineProps<SidebarProps>(), {
-  variant: "inset",
-})
 
-const emit = defineEmits<{
-  (e: 'logout'): void
-}>()
+const props = withDefaults(defineProps<SidebarProps>(), { variant: "inset",})
+
+const emit = defineEmits<{ (e: 'logout'): void }>()
 const authStore = useAuthStore()
 
 const data = computed(() => ({
@@ -53,57 +32,56 @@ const data = computed(() => ({
     },
     {
       title: "Configurações",
-      url: "/teste",
+      url: "#",
       icon: Settings2,
       requiresRole: "admin",
       items: [
         {
           title: "Usuários",
-          url: "/dashboard/users",
-          requiresPermission: "users:manage"
+          url: "users",
         },
         {
           title: "Gerenciar Dashboards",
-          url: "/dashboard/manage-dashboards",
-          requiresPermission: "dashboards:manage"
+          url: "manage-dashboards",
         }
       ],
     },
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
+  ]
+  // navSecondary: [
+  //   {
+  //     title: "Support",
+  //     url: "#",
+  //     icon: LifeBuoy,
+  //   },
+  //   {
+  //     title: "Feedback",
+  //     url: "#",
+  //     icon: Send,
+  //   },
+  // ],
+  // projects: [
+  //   {
+  //     name: "Design Engineering",
+  //     url: "#",
+  //     icon: Frame,
+  //   },
+  //   {
+  //     name: "Sales & Marketing",
+  //     url: "#",
+  //     icon: PieChart,
+  //   },
+  //   {
+  //     name: "Travel",
+  //     url: "#",
+  //     icon: Map,
+  //   },
+  // ],
 }))
 </script>
 
 <template>
   <Sidebar v-bind="props" class="bg-slate-950 border-r border-white/5">
+    
     <SidebarHeader class="bg-slate-950 p-4">
       <SidebarMenu>
         <SidebarMenuItem>
@@ -123,8 +101,8 @@ const data = computed(() => ({
 
     <SidebarContent class="bg-slate-950 px-2">
       <NavMain :items="data.navMain" />
-      <NavProjects :projects="data.projects" />
-      <NavSecondary :items="data.navSecondary" class="mt-auto pb-4" />
+      <!-- <NavProjects :projects="data.projects" />
+      <NavSecondary :items="data.navSecondary" class="mt-auto pb-4" /> -->
     </SidebarContent>
 
     <SidebarFooter class="bg-slate-950 border-t border-white/5 p-4">
@@ -138,5 +116,6 @@ const data = computed(() => ({
         </template>
       </ClientOnly>
     </SidebarFooter>
+
   </Sidebar>
 </template>

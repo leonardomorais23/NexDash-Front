@@ -1,5 +1,5 @@
-import { useAuthStore } from '~/features/auth/stores/authStore'
-import { usePermissions } from '~/composables/usePermissions'
+import { useAuthStore } from '~/features/auth/stores/AuthStore'
+import { usePermissions } from '~/features/auth/composables/UsePermissions'
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const auth = useAuthStore()

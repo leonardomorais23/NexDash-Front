@@ -1,22 +1,21 @@
-import type { DashboardResponse, DashboardConfig } from "~/features/dashboard/types/dashboardTypes";
+import type { DashboardResponse, DashboardConfig } from "~/features/dashboard/types/DashboardTypes";
 
-export const useDashService = () => {
-  const { $api } = useNuxtApp();
+export const useDashService = {
+  getModules() {
+    const { $api } = useNuxtApp();
+    return $api<DashboardConfig[]>("/dashboard/modules",
+      {
+        method: "GET",
+        retry: 0,
+      });
+  },
 
-  const getModules = async (): Promise<DashboardConfig[]> => {
-    return await $api<DashboardConfig[]>("/dashboard/modules", {
-      method: "GET",
-    });
-  };
-
-  const getDashData = async (id: string): Promise<DashboardResponse> => {
-    return await $api<DashboardResponse>(`/dashboard/${id}`, {
-      method: "GET",
-    });
-  };
-
-  return {
-    getModules,
-    getDashData
-  };
-};
+  getDashData(id: string) {
+    const { $api } = useNuxtApp();
+    return $api<DashboardResponse>(`/dashboard/${id}`,
+      {
+        method: "GET",
+        retry: 0,
+      });
+  }
+}

@@ -1,15 +1,31 @@
 <script setup lang="ts">
-import { useAuthStore } from "~/features/auth/stores/authStore";
-import SignupForm from "~/features/auth/components/SignupForm.vue";
+import { useAuthStore } from "~/features/auth/stores/AuthStore";
 import type { SignupPayload } from "~/features/auth/types/authTypes";
+import { FetchError } from "ofetch";
+import SignupForm from "~/features/auth/components/SignupForm.vue";
+
+const auth = useAuthStore();
+const errorMessage = ref("");
+
+function getErrorMessage(err: unknown): string {
+  if (err instanceof FetchError) {
+    const data = err.data as { message?: string; error?: string } | undefined;
+
+    return data?.message || data?.error || "Erro ao cadastrar.";
+  }
+
+  return "Ocorreu um erro inesperado.";
+}
 
 async function handleSignup(payload: SignupPayload) {
-  const auth = useAuthStore();
+  errorMessage.value = "";
+
   try {
     await auth.signup(payload);
-  
-  } catch (error) {
-    console.error("Erro no signup:", error);
+
+    await navigateTo("/");
+  } catch (err: unknown) {
+    errorMessage.value = getErrorMessage(err);
   }
 }
 </script>
@@ -18,6 +34,9 @@ async function handleSignup(payload: SignupPayload) {
   <div
     class="min-h-screen bg-linear-to-br from-black to-blue-800 flex items-center justify-center"
   >
-    <SignupForm @signup="handleSignup" />
+    <SignupForm @signup="handleSignup" 
+      :loading="auth.loading"
+      :error="errorMessage"
+    />
   </div>
 </template>

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-defineProps<{
-  active: boolean
-}>()
+defineProps<{ active: boolean }>();
 </script>
 
 <template>
@@ -18,17 +16,14 @@ defineProps<{
       class="fixed inset-0 z-100 flex items-center justify-center bg-[#050b1d]/50 backdrop-blur-sm"
     >
       <div class="flex flex-col items-center gap-4">
-        
         <Icon
           name="lucide:loader-2"
           size="50"
           class="text-blue-500 animate-spin drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]"
         />
-
         <p class="text-sm text-blue-300 tracking-wide animate-pulse">
           Carregando...
         </p>
-
       </div>
     </div>
   </Transition>

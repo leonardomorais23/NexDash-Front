@@ -1,26 +1,35 @@
 <script setup lang="ts">
-import { useAuthStore } from "~/features/auth/stores/authStore";
-import LoginForm from "~/features/auth/components/LoginForm.vue";
+import { useAuthStore } from "~/features/auth/stores/AuthStore";
 import type { LoginPayload, ApiErrorResponse } from "~/features/auth/types/authTypes";
 import { FetchError } from "ofetch";
+import LoginForm from "~/features/auth/components/LoginForm.vue";
+
 
 const auth = useAuthStore();
 const errorMessage = ref("");
+
+function getErrorMessage(err: unknown): string {
+  if (err instanceof FetchError) {
+    const data = err.data as ApiErrorResponse | undefined;
+
+    return (
+      data?.message ||
+      data?.error ||
+      "E-mail ou senha incorretos."
+    );
+  }
+
+  return "Ocorreu um erro inesperado. Tente novamente.";
+}
 
 const handleLogin = async (payload: LoginPayload) => {
   errorMessage.value = "";
 
   try {
     await auth.login(payload);
-    
     await navigateTo("/");
   } catch (err: unknown) {
-    if (err instanceof FetchError) {
-      const errorData = err.data as ApiErrorResponse;
-      errorMessage.value = errorData?.error || "E-mail ou senha incorretos.";
-    } else {
-      errorMessage.value = "Ocorreu um erro inesperado. Tente novamente.";
-    }
+    errorMessage.value = getErrorMessage(err);
   }
 };
 </script>

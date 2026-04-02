@@ -9,7 +9,7 @@ import {
 import type {
   DashboardMetrics,
   ChartHistoryItem,
-} from "@/features/dashboard/types/dashboardTypes";
+} from "~/features/dashboard/types/DashboardTypes";
 
 interface Props {
   title: string;
