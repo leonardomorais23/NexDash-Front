@@ -3,7 +3,7 @@ import { ref, type HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import type { LoginPayload } from "@/features/auth/types/authTypes";
+import type { LoginPayload } from "@/features/auth/types/AuthTypes";
 
 import { Field, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";

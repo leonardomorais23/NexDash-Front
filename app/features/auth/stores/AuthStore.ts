@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { authService } from "~/features/auth/services/AuthService";
-import type { LoginPayload, SignupPayload } from "~/features/auth/types/authTypes";
+import type { LoginPayload, SignupPayload } from "~/features/auth/types/AuthTypes";
 import type { User } from "~/types/userTypes";
 import { FetchError } from "ofetch";
 

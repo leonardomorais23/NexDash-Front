@@ -83,11 +83,11 @@ const formatTime = (val: string | number) => {
         class="relative overflow-hidden p-5 rounded-2xl border backdrop-blur-sm transition-all hover:scale-[1.02]"
       >
         <p
-          class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-2"
+          class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-2 text-center"
         >
           {{ card.label }}
         </p>
-        <p :class="card.color" class="text-4xl font-black tracking-tighter">
+        <p :class="card.color" class="text-4xl font-black tracking-tighter text-center">
           {{ card.val }}
         </p>
         <div class="absolute -right-2 -bottom-2 opacity-5 scale-150">
@@ -117,12 +117,12 @@ const formatTime = (val: string | number) => {
             },
           ]"
           :key="item.key"
-          class="group bg-slate-900/40 p-4 rounded-2xl border border-white/5 hover:border-white/10 transition-colors flex-1 flex flex-col justify-center"
+          class="group bg-slate-900/40 p-4 rounded-2xl border border-white/5 hover:border-white/10 transition-colors flex-1 flex flex-col justify-center text-center"
         >
-          <div class="flex items-center gap-2 mb-1">
-            <Clock class="size-3 text-slate-500" />
+          <div class="flex items-center gap-2 mb-1 justify-center">
+            <Clock class="size-4 text-slate-500" />
             <p
-              class="text-[10px] text-slate-500 font-bold uppercase tracking-tight group-hover:text-slate-300 transition-colors"
+              class="text-[15px] text-slate-500 font-bold uppercase tracking-tight group-hover:text-slate-300 transition-colors"
             >
               {{ item.label }}
             </p>

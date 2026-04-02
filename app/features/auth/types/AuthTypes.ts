@@ -1,5 +1,5 @@
-import type { User } from "~/types/userTypes";
-import type { ApiErrorResponse as BaseApiErrorResponse } from "~/types/responseTypes";
+import type { User } from "~/types/UserTypes";
+import type { ApiErrorResponse as BaseApiErrorResponse } from "~/types/ResponseTypes";
 
 export type LoginPayload = {
   email: string;

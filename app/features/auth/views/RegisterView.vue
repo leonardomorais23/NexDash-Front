@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from "~/features/auth/stores/AuthStore";
-import type { SignupPayload } from "~/features/auth/types/authTypes";
+import type { SignupPayload } from "~/features/auth/types/AuthTypes";
 import { FetchError } from "ofetch";
 import SignupForm from "~/features/auth/components/SignupForm.vue";
 

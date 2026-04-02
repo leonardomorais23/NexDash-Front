@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from "~/features/auth/stores/AuthStore";
-import type { LoginPayload, ApiErrorResponse } from "~/features/auth/types/authTypes";
+import type { LoginPayload, ApiErrorResponse } from "~/features/auth/types/AuthTypes";
 import { FetchError } from "ofetch";
 import LoginForm from "~/features/auth/components/LoginForm.vue";
 
