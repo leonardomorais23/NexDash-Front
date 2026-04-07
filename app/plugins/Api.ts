@@ -1,23 +1,25 @@
 import { useAuthStore } from "~/features/auth/stores/AuthStore";
 
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((nuxtApp) => { // 1. Receba o nuxtApp aqui
   const config = useRuntimeConfig();
   const auth = useAuthStore();
-  const isLogged = useCookie("is_logged_in");
+  
+  // 2. Capture a rota atual aqui no topo para evitar erro de contexto no erro
+  const currentRoute = useRoute();
 
   const clearAllAuth = () => {
     auth.user = null;
     useCookie("auth_user").value = null;
     useCookie("is_logged_in").value = null;
     useCookie("XSRF-TOKEN").value = null;
+
     useCookie("_token").value = null;
     useCookie("_session").value = null;
   };
 
   const headers = useRequestHeaders(["cookie"]);
 
-  const getRootUrl = () =>
-    config.public.apiBase.replace(/\/api$/, "");
+  const getRootUrl = () => config.public.apiBase.replace(/\/api$/, "");
 
   const needsCsrf = (method?: string) => {
     return ["POST", "PUT", "PATCH", "DELETE"].includes(method || "");
@@ -33,7 +35,7 @@ export default defineNuxtPlugin(() => {
     },
 
     async onRequest({ options }) {
-      const xsrfToken = useCookie("XSRF-TOKEN");
+      const xsrfToken = await nuxtApp.runWithContext(() => useCookie("XSRF-TOKEN"));
 
       if (!xsrfToken.value) {
         try {
@@ -63,9 +65,7 @@ export default defineNuxtPlugin(() => {
 
     async onResponseError({ request, response }) {
       const url = request.toString();
-      const skipAutoLogoutPaths = [
-        "/dashboard/modules",
-      ];
+      const skipAutoLogoutPaths = ["/dashboard/modules"];
 
       if (["/login", "/logout"].some((path) => url.includes(path))) {
         return;
@@ -76,13 +76,10 @@ export default defineNuxtPlugin(() => {
       }
 
       if (response.status === 401 || response.status === 419) {
-        clearAllAuth();
 
-        const route = useRoute();
-
-        if (route.path !== "/login") {
-          isLogged.value = null;
-          await navigateTo("/login");
+        nuxtApp.runWithContext(() => clearAllAuth());
+        if (currentRoute.path !== "/login") {
+          await nuxtApp.runWithContext(() => navigateTo("/login"));
         }
       }
     },

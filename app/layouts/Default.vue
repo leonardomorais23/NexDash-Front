@@ -35,7 +35,7 @@ const handleLogout = async () => {
     <AppSidebar class="border-white/5 shadow-none" @logout="handleLogout" />
 
     <SidebarInset
-      class="bg-slate-950 flex flex-col h-full w-full m-0 p-0 rounded-none border-none shadow-none flex-1 overflow-hidden"
+      class="!m-0 !mt-0 bg-slate-950 flex flex-col h-full w-full p-0 rounded-none border-none shadow-none flex-1 overflow-hidden"
     >
       <header
         class="flex h-16 shrink-0 items-center gap-2 px-4 border-b border-white/5 bg-slate-950 sticky top-0 z-10 shadow-none"

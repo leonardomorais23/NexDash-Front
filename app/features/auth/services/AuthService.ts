@@ -1,5 +1,9 @@
-import type { LoginPayload, SignupPayload, AuthResponse } from "~/features/auth/types/AuthTypes";
-import type { User } from "~/types/userTypes";
+import type {
+  LoginPayload,
+  SignupPayload,
+  AuthResponse,
+} from "~/features/auth/types/AuthTypes";
+import type { User } from "~/types/UserTypes";
 
 export const authService = {
   login(payload: LoginPayload) {

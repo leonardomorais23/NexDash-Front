@@ -2,7 +2,13 @@
 import { ref, type HTMLAttributes } from "vue";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
@@ -13,10 +19,14 @@ const name = ref<string>("");
 const password = ref<string>("");
 const confirmPassword = ref<string>("");
 
-const emit = defineEmits<{(e: "signup", payload: { email: string; name: string; password: string } ): void; }>();
+const emit = defineEmits<{
+  (
+    e: "signup",
+    payload: { email: string; name: string; password: string },
+  ): void;
+}>();
 
 const handleSubmit = () => {
-  
   if (password.value !== confirmPassword.value) {
     alert("As senhas não coincidem.");
     return;

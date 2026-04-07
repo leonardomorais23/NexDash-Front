@@ -1,44 +1,32 @@
-import { useAuthStore } from '~/features/auth/stores/AuthStore'
-import { usePermissions } from '~/features/auth/composables/UsePermissions'
+import { usePermissions } from "~/features/auth/composables/UsePermissions";
 
-export default defineNuxtRouteMiddleware(async (to) => {
-  const auth = useAuthStore()
-  const isLogged = useCookie('is_logged_in')
+export default defineNuxtRouteMiddleware((to) => {
+  const isLogged = useCookie("is_logged_in");
+  const authUser = useCookie("auth_user");
 
-  const publicRoutes = ['/login', '/register', '/esqueci-senha']
-  const isPublicRoute = publicRoutes.includes(to.path)
+  const publicRoutes = [
+    "/login",
+    "/register",
+    "/esqueci-senha",
+    "/esqueci-minha-senha",
+  ];
+  const isPublicRoute = publicRoutes.includes(to.path);
 
-  if (isPublicRoute && isLogged.value && auth.user) {
-    return navigateTo('/')
+  if (isLogged.value) {
+    if (isPublicRoute) return navigateTo("/");
+  } else {
+    if (!isPublicRoute) return navigateTo("/login");
   }
 
-  if (isPublicRoute) {
-    return
-  }
+  const { hasPermission } = usePermissions();
+  const requiredPerm = to.meta.requiresPermission as string;
 
-  if (!isLogged.value) {
-    auth.user = null
-    return navigateTo('/login')
-  }
-
- if (isLogged.value && !auth.user) {
-    try {
-      await auth.fetchUser()
-      if (!auth.user) {
-        isLogged.value = null
-        return navigateTo('/login')
-      }
-    } catch (error) {
-      isLogged.value = null
-      return navigateTo('/login')
+  if (requiredPerm) {
+    if (!authUser.value || !hasPermission(requiredPerm)) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "Acesso negado ou sessão incompleta",
+      });
     }
   }
-  const { hasPermission } = usePermissions()
-  const requiredPerm = to.meta.requiresPermission as string
-  if (requiredPerm && !hasPermission(requiredPerm)) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: 'Acesso negado'
-    })
-  }
-})
+});
