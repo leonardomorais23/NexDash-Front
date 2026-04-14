@@ -23,7 +23,7 @@ const dash = useDashboard();
       </div>
     </template>
 
-    <template v-else-if="!dash.dashboards.value.length && !dash.isLoading.value">
+    <template v-else-if="!dash.modules.value.length && !dash.isLoading.value">
       <div class="flex flex-1 items-center justify-center text-slate-500">
         Nenhum dashboard disponível no momento
       </div>
@@ -63,7 +63,7 @@ const dash = useDashboard();
 
       <div class="flex justify-center gap-2 pt-4 shrink-0">
         <div
-          v-for="(_, i) in dash.dashboards.value"
+          v-for="(_, i) in dash.modules.value"
           :key="i"
           :class="[
             'h-1.5 rounded-full transition-all duration-300',

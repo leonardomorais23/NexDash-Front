@@ -23,8 +23,7 @@ export function useUserTable(): UseUserTableReturn {
   async function fetchUsers() {
     isLoading.value = true;
     try {
-      const response = (await ConfigService.getUsersTableConfig()) as any;
-
+      const response = await ConfigService.getUsersTableConfig() as unknown as { data: UserTableResponse[] };
       users.value = response.data;
     } catch (error) {
       console.error("Erro ao buscar usuários:", error);

@@ -1,10 +1,9 @@
 import { useAuthStore } from "~/features/auth/stores/AuthStore";
 
-export default defineNuxtPlugin((nuxtApp) => { // 1. Receba o nuxtApp aqui
+export default defineNuxtPlugin((nuxtApp) => { 
   const config = useRuntimeConfig();
   const auth = useAuthStore();
   
-  // 2. Capture a rota atual aqui no topo para evitar erro de contexto no erro
   const currentRoute = useRoute();
 
   const clearAllAuth = () => {
@@ -35,9 +34,9 @@ export default defineNuxtPlugin((nuxtApp) => { // 1. Receba o nuxtApp aqui
     },
 
     async onRequest({ options }) {
-      const xsrfToken = await nuxtApp.runWithContext(() => useCookie("XSRF-TOKEN"));
+      const xsrfToken = useCookie("XSRF-TOKEN");
 
-      if (!xsrfToken.value) {
+      if (!xsrfToken.value && needsCsrf(options.method)) {
         try {
           await $fetch(`${getRootUrl()}/sanctum/csrf-cookie`, {
             credentials: "include",
@@ -47,6 +46,7 @@ export default defineNuxtPlugin((nuxtApp) => { // 1. Receba o nuxtApp aqui
               "X-Requested-With": "XMLHttpRequest",
             },
           });
+          xsrfToken.value = useCookie("XSRF-TOKEN").value;
         } catch (error) {
           console.error("Erro ao obter CSRF:", error);
         }
@@ -54,11 +54,16 @@ export default defineNuxtPlugin((nuxtApp) => { // 1. Receba o nuxtApp aqui
 
       if (needsCsrf(options.method)) {
         const currentToken = xsrfToken.value;
+
         if (currentToken) {
-          options.headers = {
-            ...options.headers,
-            "X-XSRF-TOKEN": decodeURIComponent(currentToken),
-          } as any;
+          const requestHeaders = new Headers(options.headers || {});
+
+          requestHeaders.set(
+            "X-XSRF-TOKEN",
+            decodeURIComponent(currentToken)
+          );
+
+          options.headers = requestHeaders;
         }
       }
     },

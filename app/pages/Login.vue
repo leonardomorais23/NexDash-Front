@@ -9,9 +9,6 @@ definePageMeta({
   layout: false,
 });
 
-// onMounted(() => {
-//   authStore.preFetchCsrf();
-// });
 </script>
 
 <template>

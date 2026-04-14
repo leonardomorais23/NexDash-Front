@@ -18,8 +18,7 @@ export function useDashboard() {
 
   const { getModules, getDashData } = useDashService;
 
-  const dashboards = modules;
-  const currentDash = computed(() => dashboards.value[currentIndex.value]);
+  const currentDash = computed(() => modules.value[currentIndex.value]);
 
   const isLoading = computed(
     () => modulesLoading.value || payloadLoading.value,
@@ -63,18 +62,18 @@ export function useDashboard() {
   }
 
   function next() {
-    if (!dashboards.value.length) return;
+    if (!modules.value.length) return;
 
     currentIndex.value =
-      (currentIndex.value + 1) % dashboards.value.length;
+      (currentIndex.value + 1) % modules.value.length;
   }
 
   function prev() {
-    if (!dashboards.value.length) return;
+    if (!modules.value.length) return;
 
     currentIndex.value =
-      (currentIndex.value - 1 + dashboards.value.length) %
-      dashboards.value.length;
+      (currentIndex.value - 1 + modules.value.length) %
+      modules.value.length;
   }
 
   watch(
@@ -85,14 +84,14 @@ export function useDashboard() {
     { immediate: true },
   );
 
-
   let interval: any;
   let rotationInterval: any;
+  let handleKeyDown: ((e: KeyboardEvent) => void) | null = null;
 
   onMounted(() => {
     fetchModules();
 
-    const handleKeyDown = (e: KeyboardEvent) => {
+    handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") next();
       if (e.key === "ArrowLeft") prev();
     };
@@ -108,20 +107,20 @@ export function useDashboard() {
     }, 60000);
 
     rotationInterval = setInterval(() => {
-      if (dashboards.value.length > 1) next();
+      if (modules.value.length > 1) next();
     }, 180000);
-
-    onUnmounted(() => {
-      window.removeEventListener("keydown", handleKeyDown);
-      clearInterval(interval);
-      clearInterval(rotationInterval);
-    });
   });
 
+  onUnmounted(() => {
+    if (handleKeyDown) {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+    clearInterval(interval);
+    clearInterval(rotationInterval);
+  });
 
   return {
-    modules: computed(() => modules.value),
-    dashboards: computed(() => modules.value),
+    modules,
     payload: computed(() => rawPayload.value),
     currentDash,
     currentIndex: computed(() => currentIndex.value),

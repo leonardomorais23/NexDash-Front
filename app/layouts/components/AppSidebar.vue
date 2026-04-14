@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Command, Frame, LifeBuoy, Map, PieChart, Send, Settings2, SquareTerminal } from "lucide-vue-next";
+import { Command, Settings2, SquareTerminal } from "lucide-vue-next";
 import type { SidebarProps } from '@/components/ui/sidebar'
 import { useAuthStore } from '~/features/auth/stores/AuthStore'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
