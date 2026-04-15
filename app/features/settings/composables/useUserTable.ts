@@ -1,5 +1,6 @@
 import { ref, computed, type ComputedRef, type Ref } from "vue";
 import { ConfigService } from "@/features/settings/services/ConfigService";
+import { useAsyncState } from "@/composables/useAsyncState";
 import type { UserTableResponse } from "@/features/settings/types/ConfigTypes";
 
 type UseUserTableReturn = {
@@ -14,22 +15,26 @@ type UseUserTableReturn = {
 };
 
 export function useUserTable(): UseUserTableReturn {
-
   const users = ref<UserTableResponse[]>([]);
   const search = ref("");
   const selectedRole = ref("");
-  const isLoading = ref(false);
+  const asyncState = useAsyncState<UserTableResponse[]>();
+  asyncState.loading.value = true;
 
   async function fetchUsers() {
-    isLoading.value = true;
-    try {
-      const response = await ConfigService.getUsersTableConfig() as unknown as { data: UserTableResponse[] };
-      users.value = response.data;
-    } catch (error) {
-      console.error("Erro ao buscar usuários:", error);
-      users.value = [];
-    } finally {
-      isLoading.value = false;
+    const result = await asyncState.execute(async () => {
+      const response = (await ConfigService.getUsersTableConfig()) as unknown as {
+        data: UserTableResponse[];
+      };
+      return response.data;
+    }, {
+      onError: () => {
+        users.value = [];
+      },
+    });
+
+    if (result) {
+      users.value = result;
     }
   }
 
@@ -77,7 +82,7 @@ export function useUserTable(): UseUserTableReturn {
     search,
     selectedRole,
     roles,
-    isLoading,
+    isLoading: asyncState.loading,
     updateUser,
     fetchUsers,
   };

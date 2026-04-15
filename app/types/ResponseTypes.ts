@@ -6,3 +6,8 @@ export type ApiErrorResponse = {
   error?: string
   message?: string
 }
+
+export interface PermissionOption {
+  id: string;
+  label: string;
+}

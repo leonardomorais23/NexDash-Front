@@ -1,9 +1,5 @@
 import { ref, reactive } from "vue";
 
-/**
- * Composable reutilizável para gerenciar loading states
- * Substitui patterns manuais em useUserTable e UseDashboard
- */
 export function useAsyncState<T = any>() {
   const loading = ref(false);
   const error = ref<Error | null>(null);
@@ -14,7 +10,7 @@ export function useAsyncState<T = any>() {
     options?: {
       onSuccess?: (result: R) => void;
       onError?: (error: Error) => void;
-    }
+    },
   ): Promise<R | undefined> {
     loading.value = true;
     error.value = null;

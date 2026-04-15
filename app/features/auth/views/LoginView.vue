@@ -14,7 +14,7 @@ const handleLogin = async (payload: LoginPayload) => {
 
   try {
     await auth.login(payload);
-    await navigateTo("/");
+    await navigateTo("/dashboards");
   } catch (err: unknown) {
     errorMessage.value = getErrorMessage(err, "E-mail ou senha incorretos.");
   }

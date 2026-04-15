@@ -4,6 +4,7 @@ import type {
   AuthResponse,
 } from "~/features/auth/types/AuthTypes";
 import type { User } from "~/types/UserTypes";
+import type { PermissionOption } from "@/types/ResponseTypes";
 
 export const authService = {
   login(payload: LoginPayload) {
@@ -16,7 +17,7 @@ export const authService = {
 
   signup(payload: SignupPayload) {
     const { $api } = useNuxtApp();
-    return $api<AuthResponse>("/signup", {
+    return $api<AuthResponse>("/register", {
       method: "POST",
       body: payload,
     });
@@ -32,6 +33,13 @@ export const authService = {
   fetchUser() {
     const { $api } = useNuxtApp();
     return $api<User>("/user", {
+      method: "GET",
+      retry: 0,
+    });
+  },
+  getPermissions() {
+    const { $api } = useNuxtApp();
+    return $api<PermissionOption[]>("/permissions", {
       method: "GET",
       retry: 0,
     });

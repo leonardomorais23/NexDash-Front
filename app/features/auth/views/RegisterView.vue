@@ -13,8 +13,6 @@ async function handleSignup(payload: SignupPayload) {
 
   try {
     await auth.signup(payload);
-
-    await navigateTo("/");
   } catch (err: unknown) {
     errorMessage.value = getErrorMessage(err, "Erro ao cadastrar.");
   }

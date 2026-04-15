@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 import { usePermissions } from "~/features/auth/composables/UsePermissions";
 import type { LucideIcon } from "lucide-vue-next";
 import { ChevronRight } from "lucide-vue-next";
@@ -19,10 +21,10 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 
-defineProps<{
+const props = defineProps<{
   items: {
     title: string;
-    url: string;
+    url?: string;
     icon: LucideIcon;
     isActive?: boolean;
     requiresPermission?: string;
@@ -35,6 +37,25 @@ defineProps<{
     }[];
   }[];
 }>();
+
+const route = useRoute();
+const currentPath = computed(() => route.path);
+
+function isActive(url?: string) {
+  if (!url) return false;
+  return (
+    currentPath.value === url ||
+    (url !== "#" && currentPath.value.startsWith(url + "/"))
+  );
+}
+
+function isGroupActive(item: typeof props.items[number]) {
+  if (isActive(item.url)) {
+    return true;
+  }
+
+  return !!item.items?.some((sub) => isActive(sub.url));
+}
 
 const { hasPermission, hasRole } = usePermissions();
 </script>
@@ -51,7 +72,7 @@ const { hasPermission, hasRole } = usePermissions();
         v-for="item in items"
         :key="item.title"
         as-child
-        :default-open="item.isActive"
+        :default-open="item.isActive || isGroupActive(item)"
         v-show="
           (!item.requiresPermission ||
             hasPermission(item.requiresPermission)) &&
@@ -59,16 +80,39 @@ const { hasPermission, hasRole } = usePermissions();
         "
       >
         <SidebarMenuItem>
-          <SidebarMenuButton
-            as-child
-            :tooltip="item.title"
-            class="hover:bg-white/5 hover:text-white transition-all py-5 rounded-xl text-slate-400 data-[state=open]:bg-white/5 data-[state=open]:text-white"
-          >
-            <NuxtLink :to="item.url">
-              <component :is="item.icon" class="size-5" />
-              <span class="font-medium">{{ item.title }}</span>
-            </NuxtLink>
-          </SidebarMenuButton>
+          <template v-if="item.items?.length">
+            <CollapsibleTrigger as-child>
+              <SidebarMenuButton
+                :tooltip="item.title"
+                :class="[
+                  isActive(item.url)
+                    ? 'bg-white/10 text-white'
+                    : 'text-slate-400',
+                  'hover:bg-white/5 hover:text-white transition-all py-5 rounded-xl',
+                ]"
+              >
+                <component :is="item.icon" class="size-5" />
+                <span class="font-medium">{{ item.title }}</span>
+              </SidebarMenuButton>
+            </CollapsibleTrigger>
+          </template>
+          <template v-else>
+            <SidebarMenuButton
+              as-child
+              :tooltip="item.title"
+              :class="[
+                isActive(item.url)
+                  ? 'bg-white/10 text-white'
+                  : 'text-slate-400',
+                'hover:bg-white/5 hover:text-white transition-all py-5 rounded-xl',
+              ]"
+            >
+              <NuxtLink :to="item.url">
+                <component :is="item.icon" class="size-5" />
+                <span class="font-medium">{{ item.title }}</span>
+              </NuxtLink>
+            </SidebarMenuButton>
+          </template>
 
           <template v-if="item.items?.length">
             <CollapsibleTrigger as-child>
@@ -91,7 +135,12 @@ const { hasPermission, hasRole } = usePermissions();
                 >
                   <SidebarMenuSubButton
                     as-child
-                    class="hover:bg-white/5 hover:text-sky-400 text-slate-500 rounded-lg py-4 transition-colors"
+                    :class="[
+                      isActive(subItem.url)
+                        ? 'bg-sky-500/10 text-sky-300'
+                        : 'hover:bg-white/5 text-slate-500',
+                      'rounded-lg py-4 transition-colors',
+                    ]"
                   >
                     <NuxtLink :to="subItem.url">
                       <span class="text-xs font-medium">{{

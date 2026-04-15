@@ -13,7 +13,7 @@ export default defineNuxtRouteMiddleware((to) => {
   const isPublicRoute = publicRoutes.includes(to.path);
 
   if (isLogged.value) {
-    if (isPublicRoute) return navigateTo("/");
+    if (isPublicRoute) return navigateTo("/dashboards");
   } else {
     if (!isPublicRoute) return navigateTo("/login");
   }

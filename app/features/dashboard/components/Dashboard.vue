@@ -23,15 +23,15 @@ const dash = useDashboard();
       </div>
     </template>
 
-    <template v-else-if="!dash.modules.value.length && !dash.isLoading.value">
-      <div class="flex flex-1 items-center justify-center text-slate-500">
-        Nenhum dashboard disponível no momento
-      </div>
-    </template>
-
     <template v-else-if="dash.errorMessage.value">
       <div class="flex flex-1 items-center justify-center text-red-400">
         Erro ao carregar dados: {{ dash.errorMessage.value }}
+      </div>
+    </template>
+
+    <template v-else-if="!dash.modules.value.length && dash.modulesLoaded.value">
+      <div class="flex flex-1 items-center justify-center text-slate-500">
+        Nenhum dashboard disponível no momento
       </div>
     </template>
 

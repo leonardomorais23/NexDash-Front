@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import {
   Dialog,
   DialogContent,
@@ -8,6 +8,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import type { UserTableResponse } from "@/features/settings/types/ConfigTypes";
+import type { PermissionOption } from "@/types/ResponseTypes";
+import { authService } from "~/features/auth/services/AuthService";
 
 const props = defineProps<{
   open: boolean;
@@ -20,20 +22,32 @@ const emit = defineEmits<{
 }>();
 
 const editedUser = ref<UserTableResponse | null>(null);
+const roleOptions = ["admin", "gerente", "colaborador"];
+const selectedRole = ref<string>("");
+const permissionsSelected = ref<string[]>([]);
 
 watch(
   () => props.user,
   (newUser) => {
     editedUser.value = newUser ? JSON.parse(JSON.stringify(newUser)) : null;
+    selectedRole.value = newUser?.roles?.[0] ?? "";
+    permissionsSelected.value = newUser?.permissions ? [...newUser.permissions] : [];
   },
   { immediate: true },
 );
 
 function saveChanges() {
   if (!editedUser.value) return;
+  editedUser.value.roles = selectedRole.value ? [selectedRole.value] : [];
+  editedUser.value.permissions = [...permissionsSelected.value];
   emit("save", editedUser.value);
   emit("close");
 }
+
+const allPermissions = ref<PermissionOption[]>([]);
+onMounted(async () => {
+  allPermissions.value = await authService.getPermissions();
+});
 </script>
 
 <template>
@@ -72,13 +86,42 @@ function saveChanges() {
           <label class="mb-2 block text-sm font-medium text-white/70">
             Perfil
           </label>
-          <select
-            v-model="editedUser.roles[0]"
-            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
-          >
-            <option value="admin" class="bg-slate-900">admin</option>
-            <option value="user" class="bg-slate-900">user</option>
-          </select>
+          <div class="grid gap-2 md:grid-cols-3">
+            <label
+              v-for="role in roleOptions"
+              :key="role"
+              class="flex cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white transition-colors hover:border-cyan-400"
+            >
+              <input
+                type="radio"
+                name="role"
+                :value="role"
+                v-model="selectedRole"
+                class="h-4 w-4 accent-cyan-400"
+              />
+              <span class="capitalize">{{ role }}</span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="mb-2 block text-sm font-medium text-white/70">
+            Permissões
+          </label>
+          <div class="grid gap-2 md:grid-cols-2">
+            <label
+              v-for="perm in allPermissions"
+              :key="perm.id"
+              class="flex cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white transition-colors hover:border-cyan-400"
+            >
+              <input
+                type="checkbox"
+                :value="perm.id"
+                v-model="permissionsSelected"
+                class="h-4 w-4 accent-cyan-400"
+              />
+              <span>{{ perm.label }}</span>
+            </label>
+          </div>
         </div>
       </div>
 

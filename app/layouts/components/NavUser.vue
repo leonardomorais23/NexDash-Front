@@ -86,13 +86,6 @@ const emit = defineEmits<{
           </DropdownMenuLabel>
           <DropdownMenuSeparator class="bg-white/5" />
           <DropdownMenuItem
-            class="focus:bg-white/10 focus:text-white cursor-pointer"
-          >
-            <Sparkles class="mr-2 size-4 text-sky-400" />
-            Upgrade to Pro
-          </DropdownMenuItem>
-          <DropdownMenuSeparator class="bg-white/5" />
-          <DropdownMenuItem
             class="focus:bg-red-500/10 focus:text-red-400 text-red-400/80 cursor-pointer"
             @click="emit('logout')"
           >

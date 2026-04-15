@@ -1,5 +1,6 @@
 import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { useDashService } from "@/features/dashboard/services/DashServices";
+import { useAsyncState } from "@/composables/useAsyncState";
 import type {
   DashboardResponse,
   DashboardConfig,
@@ -7,58 +8,49 @@ import type {
 
 export function useDashboard() {
   const currentIndex = ref(0);
+  const modulesState = useAsyncState<DashboardConfig[]>();
+  const payloadState = useAsyncState<DashboardResponse>();
+  const modulesLoaded = ref(false);
 
-  const modules = ref<DashboardConfig[]>([]);
-  const modulesLoading = ref(true);
-  const modulesError = ref<Error | null>(null);
-
-  const rawPayload = ref<DashboardResponse | null>(null);
-  const payloadLoading = ref(false);
-  const payloadError = ref<Error | null>(null);
+  modulesState.loading.value = true;
 
   const { getModules, getDashData } = useDashService;
 
-  const currentDash = computed(() => modules.value[currentIndex.value]);
+  const modules = computed<DashboardConfig[]>(
+    () => modulesState.data.value ?? [],
+  );
+
+  const currentDash = computed(
+    () => modules.value[currentIndex.value],
+  );
+
+  const payload = computed<DashboardResponse | null>(
+    () => payloadState.data.value ?? null,
+  );
 
   const isLoading = computed(
-    () => modulesLoading.value || payloadLoading.value,
+    () => modulesState.loading.value || payloadState.loading.value,
   );
 
   const errorMessage = computed(() => {
     return (
-      modulesError.value?.message ||
-      payloadError.value?.message ||
+      modulesState.error.value?.message ||
+      payloadState.error.value?.message ||
       ""
     );
   });
 
   async function fetchModules() {
-    modulesLoading.value = true;
-    modulesError.value = null;
-
-    try {
-      modules.value = await getModules();
-    } catch (err: unknown) {
-      modulesError.value =
-        err instanceof Error ? err : new Error(String(err));
-    } finally {
-      modulesLoading.value = false;
-    }
+    await modulesState.execute(async () => getModules());
+    modulesLoaded.value = true;
   }
 
   async function fetchPayload(id: string) {
-    payloadLoading.value = true;
-    payloadError.value = null;
-
-    try {
-      rawPayload.value = await getDashData(id);
-    } catch (err: unknown) {
-      payloadError.value =
-        err instanceof Error ? err : new Error(String(err));
-      rawPayload.value = null;
-    } finally {
-      payloadLoading.value = false;
-    }
+    await payloadState.execute(async () => getDashData(id), {
+      onError: () => {
+        payloadState.data.value = null;
+      },
+    });
   }
 
   function next() {
@@ -99,9 +91,14 @@ export function useDashboard() {
     window.addEventListener("keydown", handleKeyDown);
 
     interval = setInterval(async () => {
-      if (currentDash.value && !payloadLoading.value) {
-        rawPayload.value = await getDashData(
-          currentDash.value.id,
+      if (currentDash.value && !payloadState.loading.value) {
+        await payloadState.execute(async () =>
+          getDashData(currentDash.value!.id),
+          {
+            onError: () => {
+              payloadState.data.value = null;
+            },
+          },
         );
       }
     }, 60000);
@@ -121,11 +118,12 @@ export function useDashboard() {
 
   return {
     modules,
-    payload: computed(() => rawPayload.value),
+    payload,
     currentDash,
     currentIndex: computed(() => currentIndex.value),
     isLoading,
     errorMessage,
+    modulesLoaded,
     next,
     prev,
   };

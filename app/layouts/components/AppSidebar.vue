@@ -32,7 +32,6 @@ const data = computed(() => ({
     },
     {
       title: "Configurações",
-      url: "#",
       icon: Settings2,
       requiresRole: "admin",
       items: [
@@ -86,14 +85,14 @@ const data = computed(() => ({
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" as-child class="hover:bg-white/5 transition-colors">
-            <a href="#">
+            <RouterLink to="/dashboards">
               <div class="flex aspect-square size-9 items-center justify-center rounded-xl bg-sky-600 text-white shadow-lg shadow-sky-900/20">
                 <Command class="size-5" />
               </div>
               <div class="grid flex-1 text-left text-sm leading-tight ml-2">
                 <span class="truncate font-bold text-white text-base">NexDash</span>
               </div>
-            </a>
+            </RouterLink>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
