@@ -9,35 +9,34 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { useUserTable } from "~/features/settings/composables/useSettings";
-import EditUserModal from "@/features/settings/components/users/EditUserModal.vue";
-import type { UserTableResponse } from "@/features/settings/types/ConfigTypes";
+import { useManageDashboard } from "~/features/settings/composables/useSettings";
+import EditDashboardModal from "@/features/settings/components/manage-dashboards/EditDashboardModal.vue";
+import type { DashboardConfig } from "@/features/dashboard/types/DashboardTypes";
 
 const {
-  filteredUsers,
-  search,
-  selectedRole,
-  fetchUsers,
-  updateUser,
-  roles,
+  filteredDashboards,
   isLoading,
-} = useUserTable();
+  search,
+  selectedDash,
+  updateDashboard,
+  fetchDashboards,
+} = useManageDashboard();
 
-const selectedUser = ref<UserTableResponse | null>(null);
+const selectedDashboard = ref<DashboardConfig | null>(null);
 const modalOpen = ref(false);
 
-function openEditModal(user: UserTableResponse) {
-  selectedUser.value = { ...user };
+function openEditModal(dashboard: DashboardConfig) {
+  selectedDashboard.value = { ...dashboard };
   modalOpen.value = true;
 }
 
-async function handleSave(updatedUser: UserTableResponse) {
-  updateUser(updatedUser);
+async function handleSave(updatedDashboard: DashboardConfig) {
+  await updateDashboard(updatedDashboard);
   modalOpen.value = false;
 }
 
 onMounted(() => {
-  fetchUsers();
+  fetchDashboards();
 });
 </script>
 
@@ -48,24 +47,22 @@ onMounted(() => {
         <input
           v-model="search"
           type="text"
-          placeholder="Pesquisar usuários..."
+          placeholder="Pesquisar Dashboards..."
           class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 placeholder:text-white/40 backdrop-blur-md transition-all focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 md:col-span-2"
         />
 
         <select
-          v-model="selectedRole"
+          v-model="selectedDash"
           class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 backdrop-blur-md transition-all focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
         >
           <option value="" class="bg-slate-900 text-white">
-            Todos os Perfis
+            Todos os Status
           </option>
-          <option
-            v-for="role in roles"
-            :key="role"
-            :value="role"
-            class="bg-slate-900 text-white"
-          >
-            {{ role }}
+          <option value="ativo" class="bg-slate-900 text-white">
+            Ativo
+          </option>
+          <option value="inativo" class="bg-slate-900 text-white">
+            Inativo
           </option>
         </select>
       </div>
@@ -78,9 +75,8 @@ onMounted(() => {
             <TableRow class="border-b border-white/10">
               <TableHead class="font-semibold text-white/80">ID</TableHead>
               <TableHead class="font-semibold text-white/80">Nome</TableHead>
-              <TableHead class="font-semibold text-white/80">Email</TableHead>
               <TableHead class="text-center font-semibold text-white/80"
-                >Perfil</TableHead
+                >Status</TableHead
               >
               <TableHead class="text-center font-semibold text-white/80"
                 >Ações</TableHead
@@ -100,20 +96,19 @@ onMounted(() => {
 
             <TableRow
               v-else
-              v-for="item in filteredUsers"
+              v-for="item in filteredDashboards"
               :key="item.id"
               class="border-b border-white/5 transition-colors hover:bg-white/[0.02]"
             >
               <TableCell class="text-white/70">{{ item.id }}</TableCell>
               <TableCell class="text-white font-medium">{{
-                item.name
+                item.title
               }}</TableCell>
-              <TableCell class="text-white/70">{{ item.email }}</TableCell>
               <TableCell class="text-center">
                 <span
                   class="rounded-lg border border-cyan-400/20 bg-cyan-400/10 px-2 py-1 text-[10px] uppercase tracking-wider font-bold text-cyan-300"
                 >
-                  {{ item.roles.join(", ") }}
+                  {{ item.status || 'Ativo' }}
                 </span>
               </TableCell>
               <TableCell class="text-center">
@@ -126,9 +121,9 @@ onMounted(() => {
               </TableCell>
             </TableRow>
 
-            <TableRow v-if="!isLoading && filteredUsers.length === 0">
+            <TableRow v-if="!isLoading && filteredDashboards.length === 0">
               <TableCell colspan="5" class="py-10 text-center text-white/40">
-                Nenhum usuário encontrado.
+                Nenhum dashboard encontrado.
               </TableCell>
             </TableRow>
           </TableBody>
@@ -137,9 +132,9 @@ onMounted(() => {
     </div>
   </div>
 
-  <EditUserModal
+  <EditDashboardModal
     :open="modalOpen"
-    :user="selectedUser"
+    :dashboard="selectedDashboard"
     @close="modalOpen = false"
     @save="handleSave"
   />

@@ -53,7 +53,7 @@ const dash = useDashboard();
       <div class="flex-1 flex flex-col min-h-0 w-full px-4 lg:px-8">
         <Transition mode="out-in" name="dash-slide">
           <DashboardDisplay
-            :key="dash.currentDash.value?.id"
+            :key="dash.currentDash.value?.slug"
             :title="dash.currentDash.value?.title"
             :metrics="dash.payload.value?.metrics"
             :chart-data="dash.payload.value?.history"

@@ -71,7 +71,7 @@ export function useDashboard() {
   watch(
     currentDash,
     (dash) => {
-      if (dash?.id) fetchPayload(dash.id);
+      if (dash?.slug) fetchPayload(dash.slug);
     },
     { immediate: true },
   );
@@ -93,7 +93,7 @@ export function useDashboard() {
     interval = setInterval(async () => {
       if (currentDash.value && !payloadState.loading.value) {
         await payloadState.execute(async () =>
-          getDashData(currentDash.value!.id),
+          getDashData(currentDash.value!.slug),
           {
             onError: () => {
               payloadState.data.value = null;

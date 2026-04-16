@@ -1,10 +1,7 @@
-<script lang="ts">
-
+<script setup>
+import ManageDashView from '@/features/settings/views/ManageDashView.vue'
 </script>
 
 <template>
-  <div>
-    <h1>Manage Dashboards</h1>
-    <!-- Dashboard management content -->
-  </div>
+  <ManageDashView />
 </template>

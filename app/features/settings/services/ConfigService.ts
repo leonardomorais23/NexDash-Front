@@ -1,4 +1,5 @@
 import type { UserTableResponse } from "~/features/settings/types/ConfigTypes";
+import type { DashboardConfig } from "~/features/dashboard/types/DashboardTypes";
 
 export const ConfigService = {
   getUsersTableConfig() {
@@ -12,9 +13,26 @@ export const ConfigService = {
   updateUsersTableConfig(id: number, userData: Partial<UserTableResponse>) {
     const { $api } = useNuxtApp();
 
-    return $api<UserTableResponse[]>(`/settings/editUser/${id}`, {
+    return $api<UserTableResponse[]>(`/settings/users/${id}`, {
       method: "PATCH",
       body: userData,
+    });
+  },
+
+  getDashboardsConfig() {
+    const { $api } = useNuxtApp();
+    return $api<DashboardConfig[]>("/settings/dashboards", {
+      method: "GET",
+      retry: 0,
+    });
+  },
+
+  updateDashboardConfig(id: number, dashboardData: Partial<DashboardConfig>) {
+    const { $api } = useNuxtApp();
+
+    return $api<DashboardConfig[]>(`/settings/editDashboard/${id}`, {
+      method: "PATCH",
+      body: dashboardData,
     });
   },
 };
