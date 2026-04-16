@@ -37,11 +37,11 @@ const data = computed(() => ({
       items: [
         {
           title: "Usuários",
-          url: "/users",
+          url: "/settings/users",
         },
         {
           title: "Gerenciar Dashboards",
-          url: "/manage-dashboards",
+          url: "/settings/manage-dashboards",
         }
       ],
     },
