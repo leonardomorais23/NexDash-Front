@@ -23,7 +23,7 @@ export interface DashboardResponse {
 export interface DashboardConfig {
   id: number;
   slug: string;
-  title: string;
+  name: string;
   status: string;
   color: string;
 }

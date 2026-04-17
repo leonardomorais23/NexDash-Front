@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<SidebarProps>(), {
   collapsible: "offcanvas",
 });
 
-const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+const { isMobile, isMounted, state, openMobile, setOpenMobile } = useSidebar();
 </script>
 
 <template>
@@ -36,7 +36,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
   </div>
 
   <Sheet
-    v-else-if="isMobile"
+    v-else-if="isMounted && isMobile"
     :open="openMobile"
     v-bind="$attrs"
     @update:open="setOpenMobile"

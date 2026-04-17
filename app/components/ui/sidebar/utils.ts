@@ -11,6 +11,7 @@ export const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 export const [useSidebar, provideSidebarContext] = createContext<{
   state: ComputedRef<"expanded" | "collapsed">
   open: Ref<boolean>
+  isMounted: Ref<boolean>
   setOpen: (value: boolean) => void
   isMobile: Ref<boolean>
   openMobile: Ref<boolean>

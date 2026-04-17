@@ -69,7 +69,7 @@ export function useManageDashboard(): UseManageDashboardReturn {
     return dashboards.value.filter((dashboard) => {
       const matchesSearch =
         !searchLower ||
-        dashboard.title.toLowerCase().includes(searchLower);
+        dashboard.name.toLowerCase().includes(searchLower);
 
       const matchesStatus =
         !selectedDash.value ||

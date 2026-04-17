@@ -1,5 +1,6 @@
 import { usePermissions } from "~/features/auth/composables/UsePermissions";
 
+
 export default defineNuxtRouteMiddleware((to) => {
   const isLogged = useCookie("is_logged_in");
   const authUser = useCookie("auth_user");
@@ -23,6 +24,7 @@ export default defineNuxtRouteMiddleware((to) => {
 
   if (requiredPerm) {
     if (!authUser.value || !hasPermission(requiredPerm)) {
+      console.warn('aqui')
       throw createError({
         statusCode: 403,
         statusMessage: "Acesso negado ou sessão incompleta",

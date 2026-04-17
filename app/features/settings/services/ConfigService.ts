@@ -30,9 +30,16 @@ export const ConfigService = {
   updateDashboardConfig(id: number, dashboardData: Partial<DashboardConfig>) {
     const { $api } = useNuxtApp();
 
-    return $api<DashboardConfig[]>(`/settings/editDashboard/${id}`, {
+    return $api<DashboardConfig[]>(`/settings/dashboards/${id}`, {
       method: "PATCH",
       body: dashboardData,
     });
   },
+  createDashboard(dashboardData: Partial<DashboardConfig>) {
+    const { $api } = useNuxtApp();
+    return $api<DashboardConfig[]>("/settings/dashboards", {
+      method: "POST",
+      body: dashboardData,
+    });
+  }
 };
