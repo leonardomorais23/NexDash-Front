@@ -21,6 +21,7 @@ type UseManageDashboardReturn = {
   search: Ref<string>;
   selectedDash: Ref<string>;
   updateDashboard: (updatedDashboard: DashboardConfig) => Promise<void>;
+  createDashboard: (newDashboard: DashboardConfig) => Promise<void>; // Adicionado
   fetchDashboards: () => Promise<void>;
   isLoading: Ref<boolean>;
 };
@@ -49,6 +50,16 @@ export function useManageDashboard(): UseManageDashboardReturn {
       dashboards.value = result;
     }
   }
+  async function createDashboard(newDashboard: DashboardConfig) {
+  try {
+    const response = await ConfigService.createDashboard(newDashboard) as any;
+
+    dashboards.value = response.data ? response.data : response;
+    
+  } catch (error) {
+    console.error("Erro ao criar dashboard:", error);
+  }
+}
 
   async function updateDashboard(updatedDashboard: DashboardConfig) {
     try {
@@ -86,6 +97,7 @@ export function useManageDashboard(): UseManageDashboardReturn {
     selectedDash,
     updateDashboard,
     fetchDashboards,
+    createDashboard,
     isLoading: asyncState.loading,
   };
 }

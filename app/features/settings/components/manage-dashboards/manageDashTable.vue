@@ -5,7 +5,6 @@ import AppTable from "@/components/AppTable.vue";
 import EditDashboardModal from "@/features/settings/components/manage-dashboards/DashboardModal.vue";
 import { useManageDashboard } from "~/features/settings/composables/useSettings";
 import type { DashboardConfig } from "~/features/dashboard/types/DashboardTypes";
-import { ConfigService } from "~/features/settings/services/ConfigService";
 
 const {
   filteredDashboards,
@@ -13,6 +12,7 @@ const {
   search,
   selectedDash,
   updateDashboard,
+  createDashboard,
   fetchDashboards,
 } = useManageDashboard();
 
@@ -32,7 +32,7 @@ async function handleSave(data: DashboardConfig) {
   if (selectedDashboard.value) {
     await updateDashboard(data);
   } else {
-    await ConfigService.createDashboard(data);
+    await createDashboard(data);
   }
   modalOpen.value = false;
 }
