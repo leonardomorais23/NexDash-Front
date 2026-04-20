@@ -76,8 +76,8 @@ export function useDashboard() {
     { immediate: true },
   );
 
-  let interval: any;
-  let rotationInterval: any;
+  let interval: number;
+  let rotationInterval: number;
   let handleKeyDown: ((e: KeyboardEvent) => void) | null = null;
 
   onMounted(() => {

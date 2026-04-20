@@ -1,23 +1,23 @@
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 
-export function useAsyncState<T = any>() {
+export function useAsyncState<T>() {
   const loading = ref(false);
   const error = ref<Error | null>(null);
   const data = ref<T | null>(null);
 
-  async function execute<R = T>(
-    fn: () => Promise<R>,
+  async function execute(
+    fn: () => Promise<T>,
     options?: {
-      onSuccess?: (result: R) => void;
+      onSuccess?: (result: T) => void;
       onError?: (error: Error) => void;
     },
-  ): Promise<R | undefined> {
+  ): Promise<T | undefined> {
     loading.value = true;
     error.value = null;
 
     try {
       const result = await fn();
-      data.value = result as any;
+      data.value = result;
       options?.onSuccess?.(result);
       return result;
     } catch (err: unknown) {

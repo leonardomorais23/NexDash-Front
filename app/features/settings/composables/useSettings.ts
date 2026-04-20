@@ -52,9 +52,9 @@ export function useManageDashboard(): UseManageDashboardReturn {
   }
   async function createDashboard(newDashboard: DashboardConfig) {
   try {
-    const response = await ConfigService.createDashboard(newDashboard) as any;
+    const response = await ConfigService.createDashboard(newDashboard);
 
-    dashboards.value = response.data ? response.data : response;
+    dashboards.value.push(response);
     
   } catch (error) {
     console.error("Erro ao criar dashboard:", error);

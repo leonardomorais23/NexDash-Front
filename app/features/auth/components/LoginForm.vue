@@ -5,7 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { LoginPayload } from "@/features/auth/types/AuthTypes";
 
-import { Field, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldSeparator,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 const props = defineProps<{ class?: HTMLAttributes["class"] }>();

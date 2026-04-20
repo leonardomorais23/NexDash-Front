@@ -36,10 +36,11 @@ export const ConfigService = {
     });
   },
   createDashboard(dashboardData: Partial<DashboardConfig>) {
-    const { $api } = useNuxtApp();
-    return $api<DashboardConfig[]>("/settings/dashboards", {
-      method: "POST",
-      body: dashboardData,
-    });
-  }
+  const { $api } = useNuxtApp();
+
+  return $api<DashboardConfig>("/settings/dashboards", {
+    method: "POST",
+    body: dashboardData,
+  });
+}
 };

@@ -1,5 +1,3 @@
-import type { s } from "vue-router/dist/router-CWoNjPRp.mjs";
-
 export interface DashboardMetrics {
   pendentes: number | string;
   abertas: number | string;

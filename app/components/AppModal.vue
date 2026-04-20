@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends Record<string, any>">
+<script setup lang="ts" generic="T extends Record<string, unknown>">
 import { ref, watch } from "vue";
 import {
   Dialog,
@@ -25,7 +25,7 @@ watch(
   () => props.open,
   (isOpen) => {
     if (isOpen && props.data) {
-      editedData.value = JSON.parse(JSON.stringify(props.data));
+      editedData.value = structuredClone(props.data);
     }
   },
   { immediate: true },

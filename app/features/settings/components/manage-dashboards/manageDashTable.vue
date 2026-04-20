@@ -16,10 +16,10 @@ const {
   fetchDashboards,
 } = useManageDashboard();
 
-const selectedDashboard = ref(null);
+const selectedDashboard = ref<DashboardConfig | null>(null);
 const modalOpen = ref(false);
 
-function openEditModal(dashboard: any) {
+function openEditModal(dashboard: DashboardConfig) {
   selectedDashboard.value = { ...dashboard };
   modalOpen.value = true;
 }

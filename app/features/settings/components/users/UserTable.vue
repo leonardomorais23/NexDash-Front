@@ -4,6 +4,8 @@ import { TableHead, TableCell } from "@/components/ui/table";
 import AppTable from "@/components/AppTable.vue";
 import EditUserModal from "@/features/settings/components/users/EditUserModal.vue";
 import { useUserTable } from "~/features/settings/composables/useSettings";
+import type { UserTableResponse } from "~/features/settings/types/ConfigTypes";
+import { User } from "lucide-vue-next";
 
 const {
   filteredUsers,
@@ -15,10 +17,10 @@ const {
   isLoading,
 } = useUserTable();
 
-const selectedUser = ref(null);
+const selectedUser = ref<UserTableResponse | null>(null);
 const modalOpen = ref(false);
 
-function openEditModal(user: any) {
+function openEditModal(user: UserTableResponse) {
   selectedUser.value = { ...user };
   modalOpen.value = true;
 }
