@@ -9,7 +9,7 @@ const isLoading = ref(false);
 
 const pageTitle = computed(() => {
   const path = route.path.split("/").filter(Boolean).pop();
-  if (!path || path === "dashboard") return "Dashboard Geral";
+  if (!path || path === "dashboard") return "Home";
 
   return path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, " ");
 });
