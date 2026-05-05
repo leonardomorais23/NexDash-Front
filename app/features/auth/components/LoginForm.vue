@@ -70,7 +70,7 @@ function togglePassword() {
                   >Senha</FieldLabel
                 >
                 <NuxtLink
-                  to="#"
+                  to="/forgot-password"
                   class="text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors"
                 >
                   Esqueci minha senha
@@ -147,7 +147,7 @@ function togglePassword() {
             class="absolute inset-0 bg-linear-to-br from-slate-200/50 to-slate-400/20 shadow-inner"
           />
           <img
-            src="#"
+            src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80"
             alt="Dashboard Preview"
             class="absolute inset-0 h-full w-full object-cover opacity-80 mix-blend-overlay"
           />
@@ -158,13 +158,13 @@ function togglePassword() {
     <p class="px-6 text-center text-xs text-slate-400/80 leading-relaxed">
       Ao clicar em continuar, você concorda com nossos <br />
       <NuxtLink
-        to="#"
+        to="/forgot-password"
         class="text-slate-300 hover:text-white underline decoration-slate-500"
         >Termos de Serviço</NuxtLink
       >
       e
       <NuxtLink
-        to="#"
+        to="/forgot-password"
         class="text-slate-300 hover:text-white underline decoration-slate-500"
         >Política de Privacidade</NuxtLink
       >.
