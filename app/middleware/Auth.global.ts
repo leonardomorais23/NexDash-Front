@@ -24,7 +24,6 @@ export default defineNuxtRouteMiddleware((to) => {
 
   if (requiredPerm) {
     if (!authUser.value || !hasPermission(requiredPerm)) {
-      console.warn('aqui')
       throw createError({
         statusCode: 403,
         statusMessage: "Acesso negado ou sessão incompleta",

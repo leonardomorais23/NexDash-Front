@@ -1,5 +1,5 @@
-<script setup lang="ts" generic="T extends Record<string, unknown>">
-import { ref, watch } from "vue";
+<script setup lang="ts" generic="T extends object">
+import { ref, watch, toRaw } from "vue";
 import {
   Dialog,
   DialogContent,
@@ -22,10 +22,15 @@ const emit = defineEmits<{
 const editedData = ref<T | null>(null);
 
 watch(
-  () => props.open,
-  (isOpen) => {
-    if (isOpen && props.data) {
-      editedData.value = structuredClone(props.data);
+  [() => props.open, () => props.data],
+  ([isOpen, data]) => {
+    if (isOpen && data) {
+      editedData.value = JSON.parse(JSON.stringify(toRaw(data)));
+      return;
+    }
+
+    if (!isOpen) {
+      editedData.value = null;
     }
   },
   { immediate: true },

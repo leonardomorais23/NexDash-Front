@@ -25,6 +25,7 @@ function openEditModal(user: UserTableResponse) {
   modalOpen.value = true;
 }
 
+
 onMounted(() => fetchUsers());
 </script>
 

@@ -49,7 +49,7 @@ const normalizedDashboard = computed<DashboardFormData>(() => {
     @close="emit('close')"
     @save="(data) => emit('save', data)"
   >
-    <template #default="{ formData, styles }">
+    <template #default="{ formData, styles }: { formData: DashboardFormData; styles: any }">
       <div>
         <label class="mb-2 block text-sm font-medium text-white/70"
           >Título:</label
