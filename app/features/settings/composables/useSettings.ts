@@ -50,12 +50,25 @@ export function useManageDashboard(): UseManageDashboardReturn {
       dashboards.value = result;
     }
   }
-  async function createDashboard(newDashboard: DashboardConfig) {
+async function createDashboard(newDashboard: DashboardConfig) {
   try {
     const response = await ConfigService.createDashboard(newDashboard);
+    const payload = (response as any)?.data ?? response;
 
-    dashboards.value.push(response);
-    
+    if (Array.isArray(payload)) {
+      dashboards.value = payload as DashboardConfig[];
+      return;
+    }
+
+    const dashboard = payload as DashboardConfig;
+    if (!dashboard?.id) return;
+
+    const index = dashboards.value.findIndex((item) => item.id === dashboard.id);
+    if (index === -1) {
+      dashboards.value = [...dashboards.value, dashboard];
+    } else {
+      dashboards.value[index] = dashboard;
+    }
   } catch (error) {
     console.error("Erro ao criar dashboard:", error);
   }

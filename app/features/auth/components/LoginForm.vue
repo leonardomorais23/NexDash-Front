@@ -38,7 +38,7 @@ function togglePassword() {
     <Card
       class="overflow-hidden p-2 border-white/10 bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl"
     >
-      <CardContent class="grid p-0 md:grid-cols-2 w-full">
+      <CardContent class="grid p-0 md:grid-cols-2 w-full ">
         <form class="p-6 md:p-10" @submit.prevent="loginSubmit">
           <FieldGroup class="gap-6">
             <div class="flex flex-col items-center gap-2 text-center mb-4">
